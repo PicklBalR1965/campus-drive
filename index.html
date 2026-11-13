@@ -111,16 +111,27 @@
   #bLoader { right: calc(env(safe-area-inset-right) + 18px); bottom: calc(env(safe-area-inset-bottom) + 178px); width: 96px; height: 42px; background: #f26a10; font-size: 14px; }
   #shifter { position: fixed; z-index: 6; right: calc(env(safe-area-inset-right) + 234px); bottom: calc(env(safe-area-inset-bottom) + 18px); width: 150px; padding: 8px;
     background: rgba(15,20,28,.6); border: 2px solid var(--line); border-radius: 18px; touch-action: none; }
-  #shifter .gate { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 40px 18px 40px; gap: 4px;
-    background: linear-gradient(#555b63,#555b63) center/86% 4px no-repeat, linear-gradient(#555b63,#555b63) 16.5% center/4px 100% no-repeat, linear-gradient(#555b63,#555b63) center/4px 100% no-repeat, linear-gradient(#555b63,#555b63) 83.5% top/4px 50% no-repeat; }
-  #shifter .gp { border: none; border-radius: 50%; background: #2a2f36; color: #ddd; font-weight: 800; font-size: 15px; width: 40px; height: 40px; justify-self: center; }
-  #shifter .gp.n { grid-column: 1 / 4; width: 30px; height: 18px; border-radius: 9px; font-size: 10px; }
-  #shifter .gp.on { background: radial-gradient(circle at 35% 30%, #f3f3f3, #9aa1a8); color: #111; box-shadow: 0 0 0 3px #cf9f2b; }
+  #shifter .gate { position: relative; height: 112px; margin: 8px 6px 10px; touch-action: none; }
+  #shifter .gate svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #shifter .gl { position: absolute; transform: translate(-50%, -50%); font-size: 10px; font-weight: 800; color: #cfd3d8; pointer-events: none; text-shadow: 0 1px 2px #000; }
+  #shifter .knob { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle at 35% 30%, #fbfbfb, #8d949b 60%, #4b5157); box-shadow: 0 3px 8px rgba(0,0,0,.6), inset 0 -2px 3px rgba(0,0,0,.3); transition: none; }
+  #shifter .knob.snap { transition: left .12s, top .12s; }
   #shifter .srow { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
   #shifter .srow b { font-size: 20px; color: #cf9f2b; width: 30px; text-align: center; }
   #shifter .srow button { border: none; border-radius: 10px; background: #cf9f2b; color: #111; font-weight: 800; padding: 6px 10px; font-size: 12px; }
   #shifter.auto .gate { opacity: .3; pointer-events: none; }
   #bTop { position: fixed; z-index: 6; left: calc(env(safe-area-inset-left) + 18px); bottom: calc(env(safe-area-inset-bottom) + 148px); }
+  #ztCtl { position: fixed; z-index: 6; left: 0; right: 0; bottom: 0; pointer-events: none; }
+  .lap { position: absolute; bottom: calc(env(safe-area-inset-bottom) + 18px); width: 96px; height: 230px; border-radius: 22px; background: rgba(15,20,28,.55); border: 2px solid var(--line); pointer-events: auto; touch-action: none; }
+  #lapL { left: calc(env(safe-area-inset-left) + 22px); } #lapR { right: calc(env(safe-area-inset-right) + 22px); }
+  .lap i { position: absolute; left: 50%; top: 10%; bottom: 10%; width: 8px; margin-left: -4px; border-radius: 4px; background: #14171b; }
+  .lap i::after { content: ""; position: absolute; left: -14px; right: -14px; top: 50%; height: 2px; background: rgba(255,255,255,.35); }
+  .lap .lk { position: absolute; left: 50%; top: 50%; width: 74px; height: 30px; margin: -15px 0 0 -37px; border-radius: 10px; background: linear-gradient(#e9c64a, #b58e14); box-shadow: 0 3px 8px rgba(0,0,0,.5); pointer-events: none; }
+  .lap .lk.snap { transition: top .15s; }
+  .lap label { position: absolute; left: 0; right: 0; top: -20px; text-align: center; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-shadow: 0 1px 4px rgba(0,0,0,.7); }
+  #bZThr { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom) + 22px); pointer-events: auto; border: 2px solid rgba(255,255,255,.4); border-radius: 14px; padding: 10px 16px; font-weight: 800; color: #fff; background: #3a6b3f; }
+  #bZThr.hi { background: #2f8a3a; box-shadow: 0 0 0 3px #f2c51f; }
   #bHorn { right: calc(env(safe-area-inset-right) + 126px); bottom: calc(env(safe-area-inset-bottom) + 126px); width: 96px; height: 42px; background: rgba(40,40,46,.8); font-size: 14px; }
   .pedal.down { filter: brightness(1.35); transform: scale(.96); }
   #carRow .opt { flex: 1 1 150px; }
@@ -135,6 +146,8 @@
     #msg { font-size: 17px; }
     #ringInfo { font-size: 12px; padding: 4px 10px; }
     .card { padding: 14px 14px; } .card h1 { font-size: 22px; } .opt svg { height: 34px; }
+    .lap { width: 64px; height: 150px; bottom: calc(env(safe-area-inset-bottom) + 10px); } .lap .lk { width: 50px; height: 22px; margin: -11px 0 0 -25px; } #lapL { left: calc(env(safe-area-inset-left) + 12px); } #lapR { right: calc(env(safe-area-inset-right) + 12px); }
+    #bZThr { padding: 6px 10px; font-size: 11px; bottom: calc(env(safe-area-inset-bottom) + 12px); }
     #bTop { left: calc(env(safe-area-inset-left) + 10px); bottom: calc(env(safe-area-inset-bottom) + 96px); }
     #wheel { width: 150px; height: 78px; border-radius: 40px; left: calc(env(safe-area-inset-left) + 10px); bottom: calc(env(safe-area-inset-bottom) + 10px); font-size: 10px; }
     .pedal { border-radius: 12px; font-size: 12px; bottom: calc(env(safe-area-inset-bottom) + 10px); }
@@ -143,9 +156,9 @@
     #bHorn { width: 62px; height: 30px; font-size: 11px; right: calc(env(safe-area-inset-right) + 80px); bottom: calc(env(safe-area-inset-bottom) + 80px); }
     #bLoader { width: 62px; height: 30px; font-size: 11px; right: calc(env(safe-area-inset-right) + 10px); bottom: calc(env(safe-area-inset-bottom) + 116px); }
     #shifter { width: 104px; padding: 5px; border-radius: 12px; right: calc(env(safe-area-inset-right) + 150px); bottom: calc(env(safe-area-inset-bottom) + 10px); }
-    #shifter .gate { grid-template-rows: 28px 13px 28px; gap: 3px; }
-    #shifter .gp { width: 28px; height: 28px; font-size: 12px; }
-    #shifter .gp.n { width: 24px; height: 13px; font-size: 8px; }
+    #shifter .gate { height: 76px; margin: 5px 4px 6px; }
+    #shifter .knob { width: 24px; height: 24px; margin: -12px 0 0 -12px; }
+    #shifter .gl { font-size: 8px; }
     #shifter .srow { margin-top: 4px; } #shifter .srow b { font-size: 15px; } #shifter .srow button { padding: 4px 7px; font-size: 10px; }
   }
   /* very narrow portrait phones: put the shifter above the pedals */
@@ -168,10 +181,18 @@
 <div id="msg" class="hud"></div>
 <div id="wheel"></div>
 <button class="pedal" id="bHorn">📯 Horn</button>
+<div id="ztCtl" style="display:none">
+  <div class="lap" id="lapL"><i></i><div class="lk"></div><label>LEFT</label></div>
+  <button id="bZThr" class="hi">🐇 Throttle HIGH</button>
+  <div class="lap" id="lapR"><i></i><div class="lk"></div><label>RIGHT</label></div>
+</div>
 <div id="shifter" style="display:none">
-  <div class="gate"><button class="gp" data-g="1">1</button><button class="gp" data-g="3">3</button><button class="gp" data-g="-1">R</button>
-  <button class="gp n" data-g="0">N</button>
-  <button class="gp" data-g="2">2</button><button class="gp" data-g="4">4</button><span></span></div>
+  <div class="gate" id="gate">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M15 12V88M50 12V88M85 12V50M15 50H85" stroke="#14171b" stroke-width="13" stroke-linecap="round" fill="none"/><path d="M15 12V88M50 12V88M85 12V50M15 50H85" stroke="#3a4048" stroke-width="9" stroke-linecap="round" fill="none"/></svg>
+    <span class="gl" style="left:15%;top:0">1</span><span class="gl" style="left:50%;top:0">3</span><span class="gl" style="left:85%;top:0">R</span>
+    <span class="gl" style="left:15%;top:100%">2</span><span class="gl" style="left:50%;top:100%">4</span>
+    <div class="knob" id="gknob"></div>
+  </div>
   <div class="srow"><b id="gearBadge">1</b><button id="bTrans">Manual</button></div>
 </div>
 <button class="pedal" id="bLoader" style="display:none">⬆ Loader</button>
@@ -185,7 +206,7 @@
     <h3>Pick your ride</h3>
     <div class="row" id="carRow"></div>
     <h3>How to drive</h3>
-    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn · <b>Q / E</b> raise / lower the Kubota's loader</li><li><b>MGB stick shift:</b> tap a gear on the shifter (or keys <b>1–4</b>, <b>R</b>, <b>N</b>). Start in 1st and shift up as it revs. Tap <b>Manual</b> to switch to automatic. Tap <b>Top up</b> (or <b>T</b>) to raise or lower the convertible top.</li></ul>
+    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn · <b>Q / E</b> raise / lower the Kubota's loader</li><li><b>Zero-turn:</b> push both lap bars forward to go, push one further to turn, pull them back to reverse, and push one forward with the other back to spin in place. The throttle toggles between 🐢 LOW and 🐇 HIGH (keys: <b>W/S</b> left bar, <b>↑/↓</b> right bar, <b>T</b> throttle).</li><li><b>MGB stick shift:</b> drag the knob through the H-pattern (or keys <b>1–4</b>, <b>R</b>, <b>N</b>). Start in 1st and shift up as it revs. Tap <b>Manual</b> to switch to automatic. Tap <b>Top up</b> (or <b>T</b>) to raise or lower the convertible top.</li></ul>
     <button id="go">Drive! 🚗</button>
   </div>
 </div>
@@ -1011,16 +1032,16 @@ function emit(x, y, z, vx, vy, vz, life, r, g, b) { var i = pNext; pNext = (pNex
 
 // ---------------- Car state & physics ----------------
 var MANUAL = { tops: { '-1': 5, 1: 9, 2: 15, 3: 22, 4: 30 }, red: 5800, idle: 850 };
-var C = { gear: 1, manual: true, car: 'mgb', x: 97, z: 108, y: 0.7, yaw: Math.PI, spd: 0, vy: 0, steer: 0, air: false, swim: false, pitch: 0, roll: 0, lastSafe: null, state: 'ok', resetT: 0 };
+var C = { ztHigh: true, gear: 1, manual: true, car: 'mgb', x: 97, z: 108, y: 0.7, yaw: Math.PI, spd: 0, vy: 0, steer: 0, air: false, swim: false, pitch: 0, roll: 0, lastSafe: null, state: 'ok', resetT: 0 };
 var game = { playing: false, paused: true, cam: 0, sound: true, got: 0, time: 0 };
-var input = { steer: 0, gas: false, brake: false, keys: {} };
+var input = { steer: 0, gas: false, brake: false, keys: {}, lvL: 0, lvR: 0 };
 function spawnCar() {
   C.x = 97; C.z = 108; C.yaw = Math.PI; C.spd = 0; C.vy = 0; C.air = false; C.swim = false; C.state = 'ok';
   C.y = groundH(C.x, C.z); C.lastSafe = { x: C.x, z: C.z, yaw: C.yaw };
   CARS.forEach(function (k) { models[k].root.visible = k === C.car; if (models[k].A.trailer) models[k].A.trailer.visible = k === C.car; });
   C.tx = null;
   $('carName').textContent = VEH[C.car].name.toUpperCase();
-  C.gear = 1; if (typeof syncShifter === 'function') syncShifter();
+  C.gear = 1; if (typeof syncShifter === 'function') syncShifter(); if (typeof syncZT === 'function') syncZT();
   $('bLoader').style.display = C.car === 'kubota' ? '' : 'none'; $('bTop').style.display = C.car === 'mgb' ? '' : 'none'; $('bTop').textContent = C.topUp ? '☀️ Top down' : '☔ Top up'; input.loaderUp = false; $('bLoader').textContent = '⬆ Loader';
   if (typeof camPos !== 'undefined') camPos.set(C.x - Math.sin(C.yaw) * 8, C.y + 3.2, C.z - Math.cos(C.yaw) * 8);
 }
@@ -1036,6 +1057,15 @@ function stepCar(dt) {
   if (s0.depth > V.wade && !V.swim && !C.air) { C.state = 'stall'; C.resetT = 2.4; toast('💦 Splash! Only the Amphi Cruiser can swim.', 2.4); splash(C.x, C.z, 60); return; }
   C.swim = V.swim && s0.depth > 0.75;
   var max = C.swim ? V.waterMax : V.max * (onRoad(C.x, C.z) ? 1 : 0.8), acc = C.swim ? V.acc * 0.6 : V.acc;
+  if (C.car === 'zt' && !C.air && C.state === 'ok') {
+    var lL = clamp(input.lvL + (k.w ? 1 : 0) - (k.s ? 1 : 0), -1, 1), lR = clamp(input.lvR + (k.arrowup ? 1 : 0) - (k.arrowdown ? 1 : 0), -1, 1);
+    var top = (C.ztHigh ? V.max : V.max * 0.45) * (onRoad(C.x, C.z) ? 1 : 0.92);
+    var want = (lL + lR) / 2 * top * (((lL + lR) < 0) ? 0.6 : 1);
+    C.spd += (want - C.spd) * Math.min(1, dt * 3);
+    C.yaw -= (lL - lR) * (C.ztHigh ? 1.25 : 0.85) * dt;                       // left bar ahead of right = turn right (counter-rotate = spin in place)
+    C.steer = clamp((lL - lR) / 2, -1, 1);
+    gas = false; brake = false; C.ztDrive = true;
+  } else C.ztDrive = false;
   var stick = C.car === 'mgb' && C.manual;
   if (stick && !C.air) {
     var g = C.gear, top = MANUAL.tops[g] || 0, frac = top ? Math.abs(C.spd) / top : 0;
@@ -1052,12 +1082,13 @@ function stepCar(dt) {
     gas = false; brake = false;                                                                                   // handled above
   }
   if (!C.air) {
-    if (gas) C.spd += acc * dt * (C.spd < 0 ? 2.5 : 1);
+    if (C.ztDrive) {}
+    else if (gas) C.spd += acc * dt * (C.spd < 0 ? 2.5 : 1);
     else if (brake) C.spd -= (C.spd > 0.3 ? 12 : acc * 0.7) * dt;
-    else if (!stick) C.spd -= Math.sign(C.spd) * Math.min(Math.abs(C.spd), (C.swim ? 1.8 : 1.2) * dt);
+    else if (!stick && !C.ztDrive) C.spd -= Math.sign(C.spd) * Math.min(Math.abs(C.spd), (C.swim ? 1.8 : 1.2) * dt);
     if (inWater && !C.swim) C.spd *= 1 - dt * 1.5;
     if (!stick) C.spd = clamp(C.spd, -max * 0.4, max);
-    var turn = V.zeroTurn ? C.steer * 1.9 : C.swim ? C.steer * 0.6 * clamp(Math.abs(C.spd) / 3, 0.25, 1) * Math.sign(C.spd || 1)
+    var turn = C.ztDrive ? 0 : V.zeroTurn ? C.steer * 1.9 : C.swim ? C.steer * 0.6 * clamp(Math.abs(C.spd) / 3, 0.25, 1) * Math.sign(C.spd || 1)
       : C.spd * Math.tan(C.steer * V.steer * (1 - Math.min(0.45, Math.abs(C.spd) / 60))) / V.wb;
     C.yaw -= turn * dt;
   }
@@ -1205,14 +1236,15 @@ function tone(f, d, delay, type, vol) { if (!ac || !game.sound) return; try { va
 function chime() { tone(988, 0.1); tone(1319, 0.18, 0.1); }
 function thud() { tone(90, 0.25, 0, 'square', 0.15); }
 function horn() { tone(392, 0.35, 0, 'square', 0.08); tone(494, 0.35, 0, 'square', 0.06); }
-var _lastA = 0;
+var _lastA = 0, mrpmZ = null;
 function updateAudio() {
   if (!ac || !ENG) return;
   var now = performance.now() / 1000, dt = Math.min(0.1, now - (_lastA || now)); _lastA = now;
   var thr = (input.gas || input.keys.arrowup) && C.state === 'ok' ? 1 : 0;
+  if (C.car === 'zt') { thr = C.ztHigh ? 0.8 : 0.25; mrpmZ = (C.ztHigh ? 3400 : 1800) + Math.abs(input.lvL + input.lvR) * 120; }
   var surf = C.swim || (CM.isWaterArea(C.x, C.z) && C.y < 0.2) ? 'water' : CM.roadAt(C.x, C.z) || 'grass';
   if (surf === 'dirt' || surf === 'sand' || surf === 'mulch') surf = 'gravel';
-  var mrpm = null;
+  var mrpm = C.car === 'zt' ? mrpmZ : null;
   if (C.car === 'mgb' && C.manual) { var tp = MANUAL.tops[C.gear]; mrpm = tp ? MANUAL.idle + (MANUAL.red - MANUAL.idle) * Math.min(1.02, Math.abs(C.spd) / tp) : MANUAL.idle + thr * 3600; }
   ENG.set(C.car, C.air ? 0 : C.spd, thr, C.air ? 'none' : surf, game.sound && game.playing && !game.paused, dt, mrpm);
 }
@@ -1243,13 +1275,53 @@ $('bReset').onclick = function () { spawnCar(); };
 $('bCam').onclick = function () { game.cam = (game.cam + 1) % 3; $('bCam').textContent = '🎥 ' + ['Chase', 'Driver', 'Top'][game.cam]; };
 $('bSound').onclick = function () { game.sound = !game.sound; initAudio(); $('bSound').textContent = game.sound ? '🔊' : '🔇'; };
 $('bHorn').addEventListener('pointerdown', function (e) { e.preventDefault(); initAudio(); horn(); });
-function setGear(g) {
+// ---- H-pattern gear lever: knob constrained to the gate slots ----
+var GATE = { cols: [0.15, 0.5, 0.85], top: 0.12, mid: 0.5, bot: 0.88 };
+var KN = { x: 0.15, y: 0.12 };
+var GEAR_AT = { '0,-1': 1, '0,1': 2, '1,-1': 3, '1,1': 4, '2,-1': -1 };
+function gearPos(g) { for (var k in GEAR_AT) if (GEAR_AT[k] === g) { var p = k.split(','); return { x: GATE.cols[+p[0]], y: +p[1] < 0 ? GATE.top : GATE.bot }; } return { x: GATE.cols[1], y: GATE.mid }; }
+function drawKnob(snap) { var k = $('gknob'); k.classList.toggle('snap', !!snap); k.style.left = (KN.x * 100) + '%'; k.style.top = (KN.y * 100) + '%'; }
+function setGear(g, fromLever) {
   if (C.car !== 'mgb') return;
-  C.gear = g; tone(g === 0 ? 300 : 180, 0.05, 0, 'square', 0.05);
-  document.querySelectorAll('#shifter .gp').forEach(function (b) { b.classList.toggle('on', +b.dataset.g === g); });
-  $('gearBadge').textContent = g === -1 ? 'R' : g === 0 ? 'N' : g;
+  if (g !== C.gear) tone(g === 0 ? 300 : 160, 0.06, 0, 'square', 0.05);
+  C.gear = g; $('gearBadge').textContent = g === -1 ? 'R' : g === 0 ? 'N' : g;
+  if (!fromLever) { var p = gearPos(g); KN.x = p.x; KN.y = p.y; drawKnob(true); }
 }
-document.querySelectorAll('#shifter .gp').forEach(function (b) { b.addEventListener('pointerdown', function (e) { e.preventDefault(); initAudio(); if (C.manual) setGear(+b.dataset.g); }); });
+(function lever() {
+  var gate = $('gate'), id = null, ox = 0, oy = 0;
+  function nearestCol(x) { var b = 0; for (var i = 1; i < 3; i++) if (Math.abs(x - GATE.cols[i]) < Math.abs(x - GATE.cols[b])) b = i; return b; }
+  function apply(px, py) {
+    var inNeutral = Math.abs(KN.y - GATE.mid) < 0.06;
+    if (inNeutral) {                                        // sideways only along the neutral rail
+      KN.x = clamp(px, GATE.cols[0], GATE.cols[2]);
+      var c = nearestCol(KN.x);
+      if (Math.abs(KN.x - GATE.cols[c]) < 0.07) { KN.x = GATE.cols[c]; KN.y = clamp(py, GATE.top, c === 2 ? GATE.mid : GATE.bot); }
+      else KN.y = GATE.mid;
+    } else {                                                // up/down only inside a slot
+      var col = nearestCol(KN.x); KN.x = GATE.cols[col];
+      KN.y = clamp(py, GATE.top, col === 2 ? GATE.mid : GATE.bot);
+    }
+    var cc = nearestCol(KN.x), row = KN.y < GATE.mid - 0.25 ? -1 : KN.y > GATE.mid + 0.25 ? 1 : 0;
+    setGear(row === 0 || KN.x !== GATE.cols[cc] ? 0 : (GEAR_AT[cc + ',' + row] || 0), true);
+    drawKnob(false);
+  }
+  gate.addEventListener('pointerdown', function (e) {
+    e.preventDefault(); initAudio(); if (!C.manual) return; id = e.pointerId; try { gate.setPointerCapture(id); } catch (er) {}
+    var r = gate.getBoundingClientRect(); ox = (e.clientX - r.left) / r.width - KN.x; oy = (e.clientY - r.top) / r.height - KN.y;
+    if (Math.hypot(ox * r.width, oy * r.height) > 30) { ox = 0; oy = 0; }            // grabbed away from the knob: knob jumps toward the finger
+  });
+  gate.addEventListener('pointermove', function (e) {
+    if (e.pointerId !== id) return; var r = gate.getBoundingClientRect();
+    var tx = (e.clientX - r.left) / r.width - ox, ty = (e.clientY - r.top) / r.height - oy;
+    for (var s = 0; s < 4; s++) apply(KN.x + (tx - KN.x) / (4 - s), KN.y + (ty - KN.y) / (4 - s));   // sub-steps so it can turn the corner of the H
+  });
+  function end(e) {
+    if (e.pointerId !== id) return; id = null;
+    if (C.gear === 0) { KN.y = GATE.mid; } else { var p = gearPos(C.gear); KN.x = p.x; KN.y = p.y; }   // spring into gear or back to neutral
+    drawKnob(true);
+  }
+  gate.addEventListener('pointerup', end); gate.addEventListener('pointercancel', end);
+})();
 $('bTrans').addEventListener('pointerdown', function (e) { e.preventDefault(); C.manual = !C.manual; syncShifter(); toast(C.manual ? 'Stick shift — pick a gear' : 'Automatic', 1.3); });
 function syncShifter() {
   var on = C.car === 'mgb';
@@ -1259,6 +1331,24 @@ function syncShifter() {
   if (on) setGear(C.manual ? C.gear : 1);
 }
 $('bTop').addEventListener('pointerdown', function (e) { e.preventDefault(); C.topUp = !C.topUp; $('bTop').textContent = C.topUp ? '☀️ Top down' : '☔ Top up'; tone(220, 0.25, 0, 'triangle', 0.04); });
+(function lapBars() {
+  ['L', 'R'].forEach(function (side) {
+    var el = $('lap' + side), knob = el.querySelector('.lk'), id = null, y0 = 0, v0 = 0, key = 'lv' + side;
+    function draw() { knob.style.top = (50 - input[key] * 40) + '%'; }
+    el.addEventListener('pointerdown', function (e) { e.preventDefault(); initAudio(); id = e.pointerId; try { el.setPointerCapture(id); } catch (er) {} y0 = e.clientY; v0 = input[key]; });
+    el.addEventListener('pointermove', function (e) { if (e.pointerId !== id) return; input[key] = clamp(v0 - (e.clientY - y0) / (el.clientHeight * 0.4), -1, 1); draw(); });
+    function end(e) { if (e.pointerId !== id) return; id = null; input[key] = 0; knob.classList.add('snap'); draw(); setTimeout(function () { knob.classList.remove('snap'); }, 150); }
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end); draw();
+  });
+  $('bZThr').addEventListener('pointerdown', function (e) { e.preventDefault(); C.ztHigh = !C.ztHigh; syncZT(); tone(C.ztHigh ? 520 : 300, 0.12, 0, 'triangle', 0.05); });
+})();
+function syncZT() {
+  var zt = C.car === 'zt';
+  $('ztCtl').style.display = zt ? '' : 'none';
+  ['wheel', 'bGas', 'bBrake'].forEach(function (id) { $(id).style.display = zt ? 'none' : ''; });
+  $('bZThr').textContent = C.ztHigh ? '🐇 Throttle HIGH' : '🐢 Throttle LOW';
+  $('bZThr').classList.toggle('hi', !!C.ztHigh);
+}
 $('bLoader').addEventListener('pointerdown', function (e) { e.preventDefault(); input.loaderUp = !input.loaderUp; $('bLoader').textContent = input.loaderUp ? '⬇ Loader' : '⬆ Loader'; });
 function hold(el, key) { el.addEventListener('pointerdown', function (e) { e.preventDefault(); initAudio(); input[key] = true; el.classList.add('down'); try { el.setPointerCapture(e.pointerId); } catch (er) {} }); var up = function () { input[key] = false; el.classList.remove('down'); }; el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up); }
 hold($('bGas'), 'gas'); hold($('bBrake'), 'brake');
@@ -1268,7 +1358,8 @@ hold($('bGas'), 'gas'); hold($('bBrake'), 'brake');
   el.addEventListener('pointermove', function (e) { if (e.pointerId !== id) return; input.steer = clamp((e.clientX - sx) / (el.clientWidth * 0.45), -1, 1); });
   var end = function (e) { if (e.pointerId !== id) return; id = null; input.steer = 0; }; el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
 })();
-addEventListener('keydown', function (e) { var k = e.key.toLowerCase(); input.keys[k] = true; if (k === 'h' || k === ' ') horn(); if (k === 't' && C.car === 'mgb') $('bTop').dispatchEvent(new PointerEvent('pointerdown')); if (C.car === 'mgb' && C.manual) { if (k >= '1' && k <= '4') setGear(+k); if (k === 'r') setGear(-1); if (k === 'n' || k === '0') setGear(0); } if (e.key.indexOf('Arrow') === 0 || k === ' ') e.preventDefault(); });
+addEventListener('keydown', function (e) { var k = e.key.toLowerCase(); input.keys[k] = true; if (k === 'h' || k === ' ') horn(); if (k === 't' && C.car === 'zt') $('bZThr').dispatchEvent(new PointerEvent('pointerdown'));
+  if (k === 't' && C.car === 'mgb') $('bTop').dispatchEvent(new PointerEvent('pointerdown')); if (C.car === 'mgb' && C.manual) { if (k >= '1' && k <= '4') setGear(+k); if (k === 'r') setGear(-1); if (k === 'n' || k === '0') setGear(0); } if (e.key.indexOf('Arrow') === 0 || k === ' ') e.preventDefault(); });
 addEventListener('keyup', function (e) { input.keys[e.key.toLowerCase()] = false; });
 document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
 
@@ -1341,7 +1432,7 @@ window.__drive = function (secs, cfg) {
   for (var t = 0; t < secs; t += 1 / 60) update(1 / 60); render(1 / 60);
   return { x: +C.x.toFixed(1), y: +C.y.toFixed(2), z: +C.z.toFixed(1), spd: +C.spd.toFixed(1), swim: C.swim, air: C.air, state: C.state, stars: game.got };
 };
-window.__C = C; window.__input = input; window.__game = game; window.CarAudio = CarAudio; window.__models = models;
+window.__C = C; window.__input = input; window.__game = game; window.CarAudio = CarAudio; window.__models = models; window.__KN = KN;
 buildMenu(); spawnCar(); requestAnimationFrame(frame);
 })();
 
