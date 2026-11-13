@@ -108,6 +108,18 @@
   .pedal { position: fixed; z-index: 6; bottom: calc(env(safe-area-inset-bottom) + 18px); border: 2px solid rgba(255,255,255,.35); color: #fff; font-weight: 800; font-size: 16px; border-radius: 18px; touch-action: none; }
   #bGas { right: calc(env(safe-area-inset-right) + 18px); width: 96px; height: 150px; background: linear-gradient(#4fd17d, #1f8f4a); }
   #bBrake { right: calc(env(safe-area-inset-right) + 126px); width: 96px; height: 96px; background: linear-gradient(#ff7a6a, #c4241a); }
+  #bLoader { right: calc(env(safe-area-inset-right) + 18px); bottom: calc(env(safe-area-inset-bottom) + 178px); width: 96px; height: 42px; background: #f26a10; font-size: 14px; }
+  #shifter { position: fixed; z-index: 6; right: calc(env(safe-area-inset-right) + 234px); bottom: calc(env(safe-area-inset-bottom) + 18px); width: 150px; padding: 8px;
+    background: rgba(15,20,28,.6); border: 2px solid var(--line); border-radius: 18px; touch-action: none; }
+  #shifter .gate { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 40px 18px 40px; gap: 4px;
+    background: linear-gradient(#555b63,#555b63) center/86% 4px no-repeat, linear-gradient(#555b63,#555b63) 16.5% center/4px 100% no-repeat, linear-gradient(#555b63,#555b63) center/4px 100% no-repeat, linear-gradient(#555b63,#555b63) 83.5% top/4px 50% no-repeat; }
+  #shifter .gp { border: none; border-radius: 50%; background: #2a2f36; color: #ddd; font-weight: 800; font-size: 15px; width: 40px; height: 40px; justify-self: center; }
+  #shifter .gp.n { grid-column: 1 / 4; width: 30px; height: 18px; border-radius: 9px; font-size: 10px; }
+  #shifter .gp.on { background: radial-gradient(circle at 35% 30%, #f3f3f3, #9aa1a8); color: #111; box-shadow: 0 0 0 3px #cf9f2b; }
+  #shifter .srow { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+  #shifter .srow b { font-size: 20px; color: #cf9f2b; width: 30px; text-align: center; }
+  #shifter .srow button { border: none; border-radius: 10px; background: #cf9f2b; color: #111; font-weight: 800; padding: 6px 10px; font-size: 12px; }
+  #shifter.auto .gate { opacity: .3; pointer-events: none; }
   #bHorn { right: calc(env(safe-area-inset-right) + 126px); bottom: calc(env(safe-area-inset-bottom) + 126px); width: 96px; height: 42px; background: rgba(40,40,46,.8); font-size: 14px; }
   .pedal.down { filter: brightness(1.35); transform: scale(.96); }
   #carRow .opt { flex: 1 1 150px; }
@@ -129,6 +141,13 @@
 <div id="msg" class="hud"></div>
 <div id="wheel"></div>
 <button class="pedal" id="bHorn">📯 Horn</button>
+<div id="shifter" style="display:none">
+  <div class="gate"><button class="gp" data-g="1">1</button><button class="gp" data-g="3">3</button><button class="gp" data-g="-1">R</button>
+  <button class="gp n" data-g="0">N</button>
+  <button class="gp" data-g="2">2</button><button class="gp" data-g="4">4</button><span></span></div>
+  <div class="srow"><b id="gearBadge">1</b><button id="bTrans">Manual</button></div>
+</div>
+<button class="pedal" id="bLoader" style="display:none">⬆ Loader</button>
 <button class="pedal" id="bBrake">BRAKE<br>REV</button>
 <button class="pedal" id="bGas">GAS</button>
 <div id="menu">
@@ -138,7 +157,7 @@
     <h3>Pick your ride</h3>
     <div class="row" id="carRow"></div>
     <h3>How to drive</h3>
-    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn</li></ul>
+    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn · <b>Q / E</b> raise / lower the Kubota's loader</li><li><b>MGB stick shift:</b> tap a gear on the shifter (or keys <b>1–4</b>, <b>R</b>, <b>N</b>). Start in 1st and shift up as it revs. Tap <b>Manual</b> to switch to automatic.</li></ul>
     <button id="go">Drive! 🚗</button>
   </div>
 </div>
@@ -705,8 +724,10 @@ var VEH = {
   mgb: { name: '1973 MGB', sub: 'Classic British roadster in mustard yellow', max: 28, acc: 6.5, steer: 0.55, wb: 2.3, grip: 0.92, swim: false, wade: 0.35, r: 1.7 },
   amphi: { name: 'Amphi Cruiser', sub: 'Amphibious car — drives into the pond, pool & creek', max: 17, acc: 4.8, steer: 0.55, wb: 2.2, grip: 0.85, swim: true, wade: 9, r: 1.7, waterMax: 6.5 },
   utv: { name: 'Farm UTV', sub: 'Off-road utility vehicle with a dump bed', max: 16, acc: 6, steer: 0.6, wb: 2.0, grip: 0.9, swim: false, wade: 0.7, r: 1.5 },
+  kubota: { name: 'Kubota MX6000', sub: 'Orange tractor with a working front-end loader', max: 9, acc: 3.4, steer: 0.62, wb: 2.3, grip: 0.95, swim: false, wade: 0.6, r: 2.0 },
   jd: { name: '1973 John Deere 4230', sub: 'Tractor pulling the Camp Curiosity hay wagon', max: 8, acc: 3, steer: 0.6, wb: 2.6, grip: 0.95, swim: false, wade: 0.6, r: 1.9 },
-  cart: { name: 'Camp Golf Cart', sub: 'Slow, steady and great for the camp paths', max: 8.5, acc: 3.5, steer: 0.65, wb: 1.7, grip: 0.95, swim: false, wade: 0.3, r: 1.3 }
+  zt: { name: 'John Deere 72" Zero-Turn', sub: 'Commercial mower — spins in place and leaves clippings', max: 6.5, acc: 4, steer: 0.6, wb: 1.6, grip: 0.95, swim: false, wade: 0.35, r: 1.6, zeroTurn: true },
+  canam: { name: 'Can-Am Outlander 650 XT', sub: 'Yellow 4x4 ATV — quick and great off-road', max: 20, acc: 7.5, steer: 0.62, wb: 1.3, grip: 0.92, swim: false, wade: 0.55, r: 1.2 }
 };
 function mesh(g, m, x, y, z) { var o = new THREE.Mesh(g, m); o.position.set(x || 0, y || 0, z || 0); return o; }
 function cbox(w, h, d, m, x, y, z) { return mesh(new THREE.BoxGeometry(w, h, d), m, x, y, z); }
@@ -776,19 +797,118 @@ function buildUTV() {
   A.cam = new V3(0, 1.6, 0.0);
   return { root: root, A: A };
 }
-function buildCart() {
-  var root = new THREE.Group(), A = {}, w = lam(0xf3f3f1);
-  root.add(cbox(1.2, 0.3, 2.3, w, 0, 0.45, 0), cbox(1.2, 0.5, 0.5, w, 0, 0.7, 0.9));
-  root.add(cbox(1.1, 0.12, 0.5, lam(0x2e7d4f), 0, 0.72, -0.15), cbox(1.1, 0.45, 0.1, lam(0x2e7d4f), 0, 0.95, -0.4));
-  [[-0.55, 0.75], [0.55, 0.75], [-0.55, -0.45], [0.55, -0.45]].forEach(function (p) { root.add(cbox(0.05, 1.3, 0.05, lam(0x999999), p[0], 1.3, p[1])); });
-  root.add(cbox(1.3, 0.06, 1.6, lam(0x2e7d4f), 0, 1.95, 0.15));
-  var ws = cbox(1.1, 0.6, 0.02, GLASS, 0, 1.55, 0.75); root.add(ws);
-  A.wheels = wheelSet(root, 0.24, 0.18, [-0.55, 0.55], [0.8, -0.75], lam(0xbbbbbb)); A.front = [A.wheels[0], A.wheels[2]];
-  A.cam = new V3(0, 1.45, -0.1);
-  return { root: root, A: A };
-}
 scene.traverse(function (o) { if (o.isMesh && o !== water && o !== poolWater && !o.material.isShaderMaterial) { o.receiveShadow = true; if (o.geometry.type !== 'PlaneGeometry' && o.geometry.type !== 'CircleGeometry') o.castShadow = true; } });
 
+
+function buildKubota() {
+  var root = new THREE.Group(), A = {}, orange = new THREE.MeshPhongMaterial({ color: 0xf26a10, shininess: 70 }), gray = lam(0x3b3e42), dark = lam(0x1d1f22), seatM = lam(0x222222);
+  root.add(cbox(0.95, 0.85, 1.9, orange, 0, 1.25, 0.65));                     // hood
+  root.add(cbox(0.8, 0.7, 0.06, dark, 0, 1.2, 1.62));                         // grille
+  for (var g = 0; g < 6; g++) root.add(cbox(0.7, 0.03, 0.02, lam(0x55585c), 0, 0.95 + g * 0.1, 1.66));
+  [-0.3, 0.3].forEach(function (x) { root.add(mesh(new THREE.CircleGeometry(0.09, 12), LIGHT, x, 1.45, 1.63)); });
+  root.add(cbox(0.85, 0.45, 1.3, gray, 0, 0.8, 0.5));                         // chassis
+  root.add(cbox(1.15, 0.6, 1.3, gray, 0, 0.95, -0.75));                       // transmission / platform
+  [-1, 1].forEach(function (s) { root.add(cbox(0.55, 0.1, 1.3, orange, s * 0.92, 1.72, -0.75)); root.add(cbox(0.1, 0.5, 1.3, orange, s * 0.66, 1.47, -0.75)); });  // fenders
+  root.add(cbox(0.55, 0.12, 0.5, seatM, 0, 1.68, -0.85), cbox(0.55, 0.45, 0.12, seatM, 0, 1.93, -1.08));
+  var sw = new THREE.TorusGeometry(0.19, 0.025, 6, 16); var swm = mesh(sw, BLACK, 0, 1.98, -0.3); swm.rotation.x = -0.9; root.add(swm);
+  root.add(cbox(0.04, 0.4, 0.04, BLACK, 0, 1.82, -0.2));
+  [-0.6, 0.6].forEach(function (x) { root.add(cbox(0.09, 1.55, 0.09, dark, x, 2.5, -1.3)); });   // two-post ROPS
+  root.add(cbox(1.3, 0.09, 0.09, dark, 0, 3.25, -1.3));
+  root.add(cbox(1.45, 0.08, 1.25, orange, 0, 3.32, -0.85));                    // canopy
+  var ex = new THREE.CylinderGeometry(0.06, 0.06, 1.2, 10); root.add(mesh(ex, BLACK, 0.3, 2.2, 1.0));
+  // KUBOTA decal on hood sides
+  var dec = (function () { var c = document.createElement('canvas'); c.width = 256; c.height = 64; var x = c.getContext('2d'); x.fillStyle = '#f26a10'; x.fillRect(0, 0, 256, 64); x.fillStyle = '#fff'; x.font = 'bold 40px Arial'; x.textAlign = 'center'; x.fillText('KUBOTA', 128, 46); var t = new THREE.CanvasTexture(c); t.anisotropy = 4; return new THREE.MeshLambertMaterial({ map: t }); })();
+  [-1, 1].forEach(function (s) { var p = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.22), dec); p.position.set(s * 0.48, 1.45, 0.7); p.rotation.y = s * Math.PI / 2; root.add(p); });
+  A.wheels = [];
+  function tire(r, w, x, y, z) {
+    var gW = new THREE.Group(); gW.position.set(x, y, z);
+    var t = new THREE.CylinderGeometry(r, r, w, 22); t.rotateZ(Math.PI / 2); gW.add(mesh(t, TIRE));
+    var h = new THREE.CylinderGeometry(r * 0.6, r * 0.6, w + 0.03, 16); h.rotateZ(Math.PI / 2); gW.add(mesh(h, orange));
+    for (var s = 0; s < 12; s++) { var lug = cbox(w + 0.04, 0.07, r * 0.22, TIRE); lug.position.y = r; var pv = new THREE.Group(); pv.rotation.x = s * Math.PI / 6; pv.add(lug); gW.add(pv); }
+    root.add(gW); A.wheels.push(gW); return gW;
+  }
+  tire(0.78, 0.42, -0.92, 0.78, -0.75); tire(0.78, 0.42, 0.92, 0.78, -0.75);
+  A.front = [tire(0.52, 0.32, -0.75, 0.52, 1.15), tire(0.52, 0.32, 0.75, 0.52, 1.15)];
+  // front-end loader: towers on the frame, arms pivot at the towers, bucket pivots at the arm tips
+  [-1, 1].forEach(function (s) { root.add(cbox(0.12, 0.9, 0.35, orange, s * 0.62, 1.55, 0.05)); });
+  var arm = new THREE.Group(); arm.position.set(0, 1.95, 0.05);
+  [-1, 1].forEach(function (s) {
+    var a1 = cbox(0.12, 0.16, 2.0, orange, s * 0.62, 0, 1.0); a1.rotation.x = 0.0; arm.add(a1);
+    var a2 = cbox(0.12, 0.16, 0.9, orange, s * 0.62, -0.38, 2.15); a2.rotation.x = 0.85; arm.add(a2);
+    var cyl = new THREE.CylinderGeometry(0.05, 0.05, 1.4, 8); cyl.rotateX(Math.PI / 2); var cm = mesh(cyl, CHROME, s * 0.5, -0.25, 0.75); cm.rotation.x = -0.35; arm.add(cm);
+  });
+  arm.add(cbox(1.36, 0.1, 0.1, orange, 0, -0.3, 1.9));                         // cross tube
+  var bucket = new THREE.Group(); bucket.position.set(0, -0.7, 2.5);
+  bucket.add(cbox(1.9, 0.06, 0.75, gray, 0, -0.32, 0.25));                     // floor
+  bucket.add(cbox(1.9, 0.7, 0.06, gray, 0, 0.0, -0.1));                        // back
+  bucket.add(cbox(1.9, 0.08, 0.06, CHROME, 0, -0.34, 0.63));                   // cutting edge
+  [-0.95, 0.95].forEach(function (x) { bucket.add(cbox(0.05, 0.6, 0.7, gray, x, -0.03, 0.25)); });
+  arm.add(bucket); root.add(arm);
+  A.arm = arm; A.bucket = bucket; A.loader = 0;
+  root.add(cbox(0.1, 0.1, 0.5, BLACK, 0, 0.45, -1.55));
+  A.cam = new V3(0, 2.6, -1.0);
+  return { root: root, A: A };
+}
+
+function buildZT() {
+  var root = new THREE.Group(), A = {}, green = new THREE.MeshPhongMaterial({ color: 0x2f8a3a, shininess: 60 }), yellow = new THREE.MeshPhongMaterial({ color: 0xf2c51f, shininess: 60 }), dark = lam(0x1d1f22);
+  root.add(cbox(0.95, 0.28, 1.9, dark, 0, 0.5, -0.05));                       // frame
+  root.add(cbox(1.0, 0.55, 0.75, green, 0, 0.92, -0.65));                     // engine hood (rear)
+  root.add(cbox(1.02, 0.06, 0.75, yellow, 0, 1.2, -0.65));
+  root.add(cbox(0.6, 0.14, 0.55, lam(0x222222), 0, 0.85, 0.0), cbox(0.6, 0.6, 0.12, lam(0x222222), 0, 1.12, -0.24));  // seat
+  [-1, 1].forEach(function (s) {                                               // lap bars
+    var bar = cbox(0.05, 0.05, 0.55, lam(0x777777), s * 0.33, 1.15, 0.38); root.add(bar);
+    root.add(cbox(0.05, 0.4, 0.05, lam(0x777777), s * 0.33, 0.95, 0.12));
+  });
+  [-0.55, 0.55].forEach(function (x) { root.add(cbox(0.07, 1.3, 0.07, dark, x, 1.3, -0.95)); });  // ROPS
+  root.add(cbox(1.15, 0.07, 0.07, dark, 0, 1.95, -0.95));
+  root.add(cbox(0.25, 0.04, 0.6, green, 0, 0.62, 0.65));                       // foot pan
+  // 72" (1.83 m) side-discharge deck
+  var deck = cbox(1.9, 0.22, 1.05, green, 0, 0.35, 0.55); root.add(deck);
+  root.add(cbox(1.92, 0.04, 1.07, yellow, 0, 0.47, 0.55));
+  root.add(cbox(0.08, 0.18, 0.5, lam(0x333333), 1.0, 0.33, 0.55));             // discharge chute
+  var dec = (function () { var c = document.createElement('canvas'); c.width = 256; c.height = 64; var x = c.getContext('2d'); x.fillStyle = '#2f8a3a'; x.fillRect(0, 0, 256, 64); x.fillStyle = '#f2c51f'; x.font = 'bold 34px Arial'; x.textAlign = 'center'; x.fillText('JOHN DEERE', 128, 44); var t = new THREE.CanvasTexture(c); return new THREE.MeshLambertMaterial({ map: t }); })();
+  var lbl = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.2), dec); lbl.position.set(0, 0.36, 1.09); root.add(lbl);
+  A.wheels = [];
+  function tire(r, w, x, y, z, caster) {
+    var gW = new THREE.Group(); gW.position.set(x, y, z);
+    var t = new THREE.CylinderGeometry(r, r, w, 20); t.rotateZ(Math.PI / 2); gW.add(mesh(t, TIRE));
+    var h = new THREE.CylinderGeometry(r * 0.55, r * 0.55, w + 0.03, 14); h.rotateZ(Math.PI / 2); gW.add(mesh(h, yellow));
+    root.add(gW); A.wheels.push(gW); return gW;
+  }
+  tire(0.4, 0.34, -0.68, 0.4, -0.55); tire(0.4, 0.34, 0.68, 0.4, -0.55);
+  A.front = [tire(0.17, 0.12, -0.7, 0.17, 1.15), tire(0.17, 0.12, 0.7, 0.17, 1.15)];
+  A.casters = true;
+  A.cam = new V3(0, 1.55, -0.1);
+  return { root: root, A: A };
+}
+function buildCanAm() {
+  var root = new THREE.Group(), A = {}, yel = new THREE.MeshPhongMaterial({ color: 0xf5c400, shininess: 80 }), blk = lam(0x1c1d20), gray = lam(0x5a5d61);
+  root.add(cbox(0.75, 0.35, 1.5, blk, 0, 0.62, 0));                           // chassis / engine
+  var body = new THREE.Shape(); body.moveTo(-1.0, 0); body.lineTo(1.05, 0); body.lineTo(0.95, 0.22); body.lineTo(0.35, 0.28); body.lineTo(-0.2, 0.32); body.lineTo(-0.9, 0.3); body.lineTo(-1.0, 0);
+  var bg = new THREE.ExtrudeGeometry(body, { depth: 1.1, bevelEnabled: true, bevelSize: 0.05, bevelThickness: 0.05, bevelSegments: 2 }); bg.translate(0, 0, -0.55); bg.rotateY(-Math.PI / 2);
+  var bm = new THREE.Mesh(bg, yel); bm.position.y = 0.72; root.add(bm);         // plastics
+  [-1, 1].forEach(function (s) { root.add(cbox(0.32, 0.06, 0.75, yel, s * 0.6, 0.98, 0.72), cbox(0.32, 0.06, 0.75, yel, s * 0.6, 0.98, -0.72)); });  // fenders
+  root.add(cbox(0.42, 0.18, 0.8, blk, 0, 1.12, -0.15));                       // seat
+  root.add(cbox(0.95, 0.05, 0.35, gray, 0, 1.12, 0.95), cbox(0.95, 0.05, 0.4, gray, 0, 1.12, -0.95));  // racks
+  root.add(cbox(0.05, 0.4, 0.05, blk, 0, 1.2, 0.5));                           // steering post
+  root.add(cbox(0.8, 0.04, 0.04, blk, 0, 1.42, 0.48));                         // handlebar
+  [-0.4, 0.4].forEach(function (x) { root.add(cbox(0.06, 0.08, 0.08, blk, x, 1.42, 0.48)); });
+  [-0.22, 0.22].forEach(function (x) { root.add(mesh(new THREE.CircleGeometry(0.07, 12), LIGHT, x, 0.98, 1.06)); });
+  root.add(cbox(0.9, 0.14, 0.08, gray, 0, 0.62, 1.12));                        // front bumper
+  A.wheels = [];
+  function tire(x, z) {
+    var gW = new THREE.Group(); gW.position.set(x, 0.36, z);
+    var t = new THREE.CylinderGeometry(0.36, 0.36, 0.26, 18); t.rotateZ(Math.PI / 2); gW.add(mesh(t, TIRE));
+    var h = new THREE.CylinderGeometry(0.2, 0.2, 0.28, 12); h.rotateZ(Math.PI / 2); gW.add(mesh(h, blk));
+    for (var s = 0; s < 10; s++) { var lug = cbox(0.3, 0.06, 0.08, TIRE); lug.position.y = 0.36; var pv = new THREE.Group(); pv.rotation.x = s * Math.PI / 5; pv.add(lug); gW.add(pv); }
+    root.add(gW); A.wheels.push(gW); return gW;
+  }
+  tire(-0.6, -0.65); tire(0.6, -0.65);
+  A.front = [tire(-0.6, 0.68), tire(0.6, 0.68)];
+  A.cam = new V3(0, 1.75, -0.4);
+  return { root: root, A: A };
+}
 function buildJD() {
   var root = new THREE.Group(), A = {}, green = new THREE.MeshPhongMaterial({ color: 0x2f8a3a, shininess: 60 }), yellow = new THREE.MeshPhongMaterial({ color: 0xf2c51f, shininess: 60 }), dark = lam(0x1d2a1f);
   root.add(cbox(1.0, 0.9, 2.3, green, 0, 1.25, 0.75));                 // hood
@@ -840,7 +960,7 @@ function buildJD() {
   A.trailer = wag; A.trailerLen = 5.8; A.hitch = 2.1;
   return { root: root, A: A };
 }
-var BUILD = { mgb: buildMGB, amphi: buildAmphi, jd: buildJD, utv: buildUTV, cart: buildCart }, CARS = ['mgb', 'amphi', 'jd', 'utv', 'cart'], models = {};
+var BUILD = { mgb: buildMGB, amphi: buildAmphi, jd: buildJD, kubota: buildKubota, zt: buildZT, canam: buildCanAm, utv: buildUTV }, CARS = ['mgb', 'amphi', 'jd', 'kubota', 'zt', 'canam', 'utv'], models = {};
 CARS.forEach(function (k) { models[k] = BUILD[k](); GFX.upgrade(models[k].root, { metal: 0.3, rough: 0.4 }); if (models[k].A.trailer) { GFX.upgrade(models[k].A.trailer, { metal: 0.05, rough: 0.7 }); models[k].A.trailer.visible = false; scene.add(models[k].A.trailer); } models[k].root.visible = false; scene.add(models[k].root); });
 
 // particles
@@ -851,7 +971,8 @@ var parts = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.25, vertex
 function emit(x, y, z, vx, vy, vz, life, r, g, b) { var i = pNext; pNext = (pNext + 1) % NP; pPos[i * 3] = x; pPos[i * 3 + 1] = y; pPos[i * 3 + 2] = z; pVel[i * 3] = vx; pVel[i * 3 + 1] = vy; pVel[i * 3 + 2] = vz; pLife[i] = life; pCol[i * 3] = r; pCol[i * 3 + 1] = g; pCol[i * 3 + 2] = b; }
 
 // ---------------- Car state & physics ----------------
-var C = { car: 'mgb', x: 97, z: 108, y: 0.7, yaw: Math.PI, spd: 0, vy: 0, steer: 0, air: false, swim: false, pitch: 0, roll: 0, lastSafe: null, state: 'ok', resetT: 0 };
+var MANUAL = { tops: { '-1': 5, 1: 9, 2: 15, 3: 22, 4: 30 }, red: 5800, idle: 850 };
+var C = { gear: 1, manual: true, car: 'mgb', x: 97, z: 108, y: 0.7, yaw: Math.PI, spd: 0, vy: 0, steer: 0, air: false, swim: false, pitch: 0, roll: 0, lastSafe: null, state: 'ok', resetT: 0 };
 var game = { playing: false, paused: true, cam: 0, sound: true, got: 0, time: 0 };
 var input = { steer: 0, gas: false, brake: false, keys: {} };
 function spawnCar() {
@@ -860,6 +981,8 @@ function spawnCar() {
   CARS.forEach(function (k) { models[k].root.visible = k === C.car; if (models[k].A.trailer) models[k].A.trailer.visible = k === C.car; });
   C.tx = null;
   $('carName').textContent = VEH[C.car].name.toUpperCase();
+  C.gear = 1; if (typeof syncShifter === 'function') syncShifter();
+  $('bLoader').style.display = C.car === 'kubota' ? '' : 'none'; input.loaderUp = false; $('bLoader').textContent = '⬆ Loader';
   if (typeof camPos !== 'undefined') camPos.set(C.x - Math.sin(C.yaw) * 8, C.y + 3.2, C.z - Math.cos(C.yaw) * 8);
 }
 function surface(x, z) { var g = groundH(x, z); return { g: g, water: g < -0.05, depth: Math.max(0, -g) }; }
@@ -874,13 +997,28 @@ function stepCar(dt) {
   if (s0.depth > V.wade && !V.swim && !C.air) { C.state = 'stall'; C.resetT = 2.4; toast('💦 Splash! Only the Amphi Cruiser can swim.', 2.4); splash(C.x, C.z, 60); return; }
   C.swim = V.swim && s0.depth > 0.75;
   var max = C.swim ? V.waterMax : V.max * (onRoad(C.x, C.z) ? 1 : 0.8), acc = C.swim ? V.acc * 0.6 : V.acc;
+  var stick = C.car === 'mgb' && C.manual;
+  if (stick && !C.air) {
+    var g = C.gear, top = MANUAL.tops[g] || 0, frac = top ? Math.abs(C.spd) / top : 0;
+    if (gas && g !== 0 && C.state === 'ok') {
+      var dir = g < 0 ? -1 : 1, pull = frac < 0.12 && g >= 3 ? 0.18 : frac < 0.2 && g === 2 ? 0.6 : 1;   // lugging in tall gears
+      if (Math.sign(C.spd) === -dir && Math.abs(C.spd) > 0.5) C.spd += dir * 9 * dt;                       // still rolling the other way
+      else if (Math.abs(C.spd) < top * (onRoad(C.x, C.z) ? 1 : 0.85)) C.spd += dir * acc * (1.25 - 0.45 * Math.min(1, g / 4)) * pull * dt;
+      else C.spd -= Math.sign(C.spd) * 2 * dt;                                                                  // rev limiter
+      if (g >= 3 && Math.abs(C.spd) < 0.6 && !C.stallWarned) { C.stallWarned = true; toast('Too high a gear — start in 1st!', 1.6); }
+    } else if (brake) C.spd -= Math.sign(C.spd) * Math.min(Math.abs(C.spd), 12 * dt);
+    else C.spd -= Math.sign(C.spd) * Math.min(Math.abs(C.spd), (g === 0 ? 0.8 : 1.6) * dt);                       // engine braking
+    if (g > 0 && C.spd > top * 1.02) C.spd -= 6 * dt;                                                           // downshift too early = slows hard
+    if (Math.abs(C.spd) > 1.5) C.stallWarned = false;
+    gas = false; brake = false;                                                                                   // handled above
+  }
   if (!C.air) {
     if (gas) C.spd += acc * dt * (C.spd < 0 ? 2.5 : 1);
     else if (brake) C.spd -= (C.spd > 0.3 ? 12 : acc * 0.7) * dt;
-    else C.spd -= Math.sign(C.spd) * Math.min(Math.abs(C.spd), (C.swim ? 1.8 : 1.2) * dt);
+    else if (!stick) C.spd -= Math.sign(C.spd) * Math.min(Math.abs(C.spd), (C.swim ? 1.8 : 1.2) * dt);
     if (inWater && !C.swim) C.spd *= 1 - dt * 1.5;
-    C.spd = clamp(C.spd, -max * 0.4, max);
-    var turn = C.swim ? C.steer * 0.6 * clamp(Math.abs(C.spd) / 3, 0.25, 1) * Math.sign(C.spd || 1)
+    if (!stick) C.spd = clamp(C.spd, -max * 0.4, max);
+    var turn = V.zeroTurn ? C.steer * 1.9 : C.swim ? C.steer * 0.6 * clamp(Math.abs(C.spd) / 3, 0.25, 1) * Math.sign(C.spd || 1)
       : C.spd * Math.tan(C.steer * V.steer * (1 - Math.min(0.45, Math.abs(C.spd) / 60))) / V.wb;
     C.yaw -= turn * dt;
   }
@@ -919,6 +1057,7 @@ function stepCar(dt) {
   // effects
   var spdA = Math.abs(C.spd);
   if (s.water && spdA > 1) for (var p = 0; p < 3; p++) { var side = p % 2 ? 1 : -1; emit(C.x - fw.z * side * 0.9, 0.05, C.z + fw.x * side * 0.9, -fw.z * side * 1.5 - fw.x * spdA * 0.2, 1 + rnd() * spdA * 0.25, fw.x * side * 1.5 - fw.z * spdA * 0.2, 0.6, 0.92, 0.96, 1); }
+  if (C.car === 'zt' && !onRoad(C.x, C.z) && !s.water && spdA > 0.8) for (var cq = 0; cq < 2; cq++) emit(C.x - fw.z * 1.0 + fw.x * 0.5, C.y + 0.35, C.z + fw.x * 1.0 + fw.z * 0.5, -fw.z * 4 + (rnd() - .5), 0.6 + rnd(), fw.x * 4 + (rnd() - .5), 0.8, 0.35, 0.62, 0.22);
   else if (!onRoad(C.x, C.z) && spdA > 6 && !C.air && rnd() < 0.5) emit(C.x - fw.x * 2, C.y + 0.2, C.z - fw.z * 2, (rnd() - .5), 0.6, (rnd() - .5), 0.7, 0.62, 0.55, 0.42);
   if (!s.water && !C.air && s.g > 0.2 && Math.random() < dt) C.lastSafe = { x: C.x, z: C.z, yaw: C.yaw };
   // stars
@@ -940,9 +1079,11 @@ function splash(x, z, n) { for (var i = 0; i < n; i++) emit(x + (rnd() - .5) * 2
 var CAR_AUDIO = {
   mgb:   { cyl: 4, idle: 850, red: 5800, gears: [0, 9, 15, 22, 30], thump: 85, bright: 1800, grit: 0.35, vol: 0.9 },
   amphi: { cyl: 4, idle: 800, red: 5200, gears: [0, 8, 13, 19], thump: 75, bright: 1300, grit: 0.3, vol: 0.85 },
+  kubota: { cyl: 4, idle: 750, red: 2600, gears: [0, 10], thump: 55, bright: 2300, grit: 0.6, vol: 0.95, diesel: true },
   jd:    { cyl: 4, idle: 650, red: 2200, gears: [0, 9], thump: 48, bright: 2600, grit: 0.7, vol: 1.0, diesel: true },
   utv:   { cyl: 2, idle: 1100, red: 6500, gears: [0, 17], thump: 70, bright: 1600, grit: 0.4, vol: 0.8, uneven: true },
-  cart:  { electric: true, vol: 0.7 }
+  zt:    { cyl: 2, idle: 1500, red: 3600, gears: [0, 7], thump: 95, bright: 2200, grit: 0.45, vol: 0.8, uneven: true },
+  canam: { cyl: 2, idle: 1300, red: 7500, gears: [0, 9, 20], thump: 80, bright: 2400, grit: 0.4, vol: 0.85, uneven: true }
 };
 function CarAudio(ac) {
   var out = ac.createGain(); out.gain.value = 0;
@@ -980,7 +1121,7 @@ function CarAudio(ac) {
   ns.connect(tF); tF.connect(tGain); tGain.connect(out); ns.start();
   var cur = null, gear = 1, rpm = 800, shiftT = 0;
   return {
-    set: function (car, spd, throttle, surf, on, dt) {
+    set: function (car, spd, throttle, surf, on, dt, forceRpm) {
       var P = CAR_AUDIO[car], t = ac.currentTime, a = Math.abs(spd);
       if (car !== cur) {
         cur = car; if (src) { try { src.stop(); } catch (e) {} src = null; }
@@ -995,12 +1136,13 @@ function CarAudio(ac) {
         wGain.gain.setTargetAtTime(0, t, 0.1);
         var G = P.gears, top = G.length - 1;
         if (shiftT > 0) shiftT -= dt;
-        else if (gear < top && a > G[gear] * 0.95) { gear++; shiftT = 0.25; }
+        else if (!forceRpm && gear < top && a > G[gear] * 0.95) { gear++; shiftT = 0.25; }
         else if (gear > 1 && a < G[gear - 1] * 0.7) { gear--; shiftT = 0.2; }
         var lo = G[gear - 1] * 0.55, hi = G[gear], frac = Math.max(0, Math.min(1, (a - lo) / Math.max(1, hi - lo)));
         var target = P.idle + (P.red - P.idle) * (0.12 + 0.8 * frac) * (a > 0.3 || throttle ? 1 : 0) + throttle * 250;
         if (shiftT > 0) target *= 0.75;
-        rpm += (target - rpm) * Math.min(1, dt * 6);
+        if (forceRpm) target = forceRpm + throttle * 120;
+        rpm += (target - rpm) * Math.min(1, dt * (forceRpm ? 12 : 6));
         src.playbackRate.setTargetAtTime(rpm / P.idle, t, 0.05);
         eLp.frequency.setTargetAtTime(P.bright * (0.35 + 0.65 * throttle) + rpm * 0.15, t, 0.08);
         eGain.gain.setTargetAtTime(on ? P.vol * (0.05 + throttle * 0.05 + (rpm / P.red) * 0.04) : 0, t, 0.08);
@@ -1031,7 +1173,9 @@ function updateAudio() {
   var thr = (input.gas || input.keys.arrowup) && C.state === 'ok' ? 1 : 0;
   var surf = C.swim || (CM.isWaterArea(C.x, C.z) && C.y < 0.2) ? 'water' : CM.roadAt(C.x, C.z) || 'grass';
   if (surf === 'dirt' || surf === 'sand' || surf === 'mulch') surf = 'gravel';
-  ENG.set(C.car, C.air ? 0 : C.spd, thr, C.air ? 'none' : surf, game.sound && game.playing && !game.paused, dt);
+  var mrpm = null;
+  if (C.car === 'mgb' && C.manual) { var tp = MANUAL.tops[C.gear]; mrpm = tp ? MANUAL.idle + (MANUAL.red - MANUAL.idle) * Math.min(1.02, Math.abs(C.spd) / tp) : MANUAL.idle + thr * 3600; }
+  ENG.set(C.car, C.air ? 0 : C.spd, thr, C.air ? 'none' : surf, game.sound && game.playing && !game.paused, dt, mrpm);
 }
 
 // ---------------- UI ----------------
@@ -1042,7 +1186,9 @@ var SIL = {
   amphi: '<svg viewBox="0 0 120 50"><path d="M8 20h84l18 6c-2 8-10 10-16 10H10z" fill="#2fb7b0"/><rect x="8" y="18" width="86" height="3" fill="#fff"/><path d="M68 18l-4-8h6z" fill="#9fc3e0"/><circle cx="30" cy="36" r="7" fill="#222"/><circle cx="30" cy="36" r="4" fill="#fff"/><circle cx="88" cy="36" r="7" fill="#222"/><circle cx="88" cy="36" r="4" fill="#fff"/><path d="M0 44c10-4 20 4 30 0s20 4 30 0 20 4 30 0 20 4 30 0" stroke="#41b8e8" stroke-width="3" fill="none"/></svg>',
   utv: '<svg viewBox="0 0 120 50"><rect x="14" y="22" width="88" height="10" fill="#3d6b35"/><rect x="20" y="16" width="34" height="10" fill="#2f5a2a"/><path d="M58 22V8h36v14" stroke="#111" stroke-width="3" fill="none"/><circle cx="32" cy="36" r="9" fill="#222"/><circle cx="32" cy="36" r="4" fill="#f2c230"/><circle cx="88" cy="36" r="9" fill="#222"/><circle cx="88" cy="36" r="4" fill="#f2c230"/></svg>',
   jd: '<svg viewBox="0 0 120 50"><rect x="56" y="8" width="30" height="3" fill="#2f8a3a"/><path d="M60 11v14M84 11v14" stroke="#2f8a3a" stroke-width="2"/><rect x="84" y="22" width="30" height="10" fill="#2f8a3a"/><rect x="84" y="22" width="30" height="2" fill="#f2c51f"/><circle cx="68" cy="34" r="11" fill="#222"/><circle cx="68" cy="34" r="6" fill="#f2c51f"/><circle cx="106" cy="39" r="6" fill="#222"/><circle cx="106" cy="39" r="3" fill="#f2c51f"/><path d="M2 22c8-12 38-12 46 0" fill="#f1ead6"/><rect x="2" y="22" width="46" height="12" fill="#c9a26b"/><circle cx="12" cy="39" r="4" fill="#222"/><circle cx="38" cy="39" r="4" fill="#222"/></svg>',
-  cart: '<svg viewBox="0 0 120 50"><rect x="22" y="24" width="76" height="10" fill="#f3f3f1"/><rect x="26" y="6" width="70" height="4" fill="#2e7d4f"/><path d="M34 10v14M88 10v14" stroke="#999" stroke-width="3"/><rect x="40" y="18" width="20" height="6" fill="#2e7d4f"/><circle cx="36" cy="37" r="6" fill="#222"/><circle cx="86" cy="37" r="6" fill="#222"/></svg>'
+  zt: '<svg viewBox="0 0 120 50"><rect x="20" y="30" width="80" height="7" fill="#2f8a3a"/><rect x="20" y="29" width="80" height="2" fill="#f2c51f"/><rect x="30" y="18" width="26" height="12" fill="#2f8a3a"/><rect x="58" y="16" width="14" height="14" fill="#222"/><path d="M34 18V4h20" stroke="#222" stroke-width="3" fill="none"/><circle cx="40" cy="38" r="8" fill="#222"/><circle cx="40" cy="38" r="4" fill="#f2c51f"/><circle cx="96" cy="42" r="4" fill="#222"/></svg>',
+  canam: '<svg viewBox="0 0 120 50"><path d="M18 30l8-10h24l8-6h22l14 8 10 8z" fill="#f5c400"/><rect x="40" y="14" width="28" height="6" fill="#1c1d20"/><path d="M82 18l6-10h10" stroke="#1c1d20" stroke-width="3" fill="none"/><circle cx="32" cy="36" r="10" fill="#222"/><circle cx="32" cy="36" r="5" fill="#1c1d20"/><circle cx="92" cy="36" r="10" fill="#222"/><circle cx="92" cy="36" r="5" fill="#1c1d20"/></svg>',
+  kubota: '<svg viewBox="0 0 120 50"><rect x="30" y="6" width="28" height="3" fill="#f26a10"/><path d="M33 9v16M55 9v16" stroke="#222" stroke-width="2"/><rect x="50" y="20" width="34" height="11" fill="#f26a10"/><path d="M58 16l40 6" stroke="#f26a10" stroke-width="4"/><path d="M98 22v14h14l-2-14z" fill="#3b3e42"/><circle cx="44" cy="34" r="10" fill="#222"/><circle cx="44" cy="34" r="5" fill="#f26a10"/><circle cx="82" cy="38" r="7" fill="#222"/><circle cx="82" cy="38" r="3" fill="#f26a10"/></svg>',
 };
 function buildMenu() {
   var pr = $('carRow'); pr.innerHTML = '';
@@ -1058,6 +1204,22 @@ $('bReset').onclick = function () { spawnCar(); };
 $('bCam').onclick = function () { game.cam = (game.cam + 1) % 3; $('bCam').textContent = '🎥 ' + ['Chase', 'Driver', 'Top'][game.cam]; };
 $('bSound').onclick = function () { game.sound = !game.sound; initAudio(); $('bSound').textContent = game.sound ? '🔊' : '🔇'; };
 $('bHorn').addEventListener('pointerdown', function (e) { e.preventDefault(); initAudio(); horn(); });
+function setGear(g) {
+  if (C.car !== 'mgb') return;
+  C.gear = g; tone(g === 0 ? 300 : 180, 0.05, 0, 'square', 0.05);
+  document.querySelectorAll('#shifter .gp').forEach(function (b) { b.classList.toggle('on', +b.dataset.g === g); });
+  $('gearBadge').textContent = g === -1 ? 'R' : g === 0 ? 'N' : g;
+}
+document.querySelectorAll('#shifter .gp').forEach(function (b) { b.addEventListener('pointerdown', function (e) { e.preventDefault(); initAudio(); if (C.manual) setGear(+b.dataset.g); }); });
+$('bTrans').addEventListener('pointerdown', function (e) { e.preventDefault(); C.manual = !C.manual; syncShifter(); toast(C.manual ? 'Stick shift — pick a gear' : 'Automatic', 1.3); });
+function syncShifter() {
+  var on = C.car === 'mgb';
+  $('shifter').style.display = on ? '' : 'none';
+  $('shifter').classList.toggle('auto', !C.manual);
+  $('bTrans').textContent = C.manual ? 'Manual' : 'Auto';
+  if (on) setGear(C.manual ? C.gear : 1);
+}
+$('bLoader').addEventListener('pointerdown', function (e) { e.preventDefault(); input.loaderUp = !input.loaderUp; $('bLoader').textContent = input.loaderUp ? '⬇ Loader' : '⬆ Loader'; });
 function hold(el, key) { el.addEventListener('pointerdown', function (e) { e.preventDefault(); initAudio(); input[key] = true; el.classList.add('down'); try { el.setPointerCapture(e.pointerId); } catch (er) {} }); var up = function () { input[key] = false; el.classList.remove('down'); }; el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up); }
 hold($('bGas'), 'gas'); hold($('bBrake'), 'brake');
 (function wheelCtl() {
@@ -1066,7 +1228,7 @@ hold($('bGas'), 'gas'); hold($('bBrake'), 'brake');
   el.addEventListener('pointermove', function (e) { if (e.pointerId !== id) return; input.steer = clamp((e.clientX - sx) / (el.clientWidth * 0.45), -1, 1); });
   var end = function (e) { if (e.pointerId !== id) return; id = null; input.steer = 0; }; el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
 })();
-addEventListener('keydown', function (e) { var k = e.key.toLowerCase(); input.keys[k] = true; if (k === 'h' || k === ' ') horn(); if (e.key.indexOf('Arrow') === 0 || k === ' ') e.preventDefault(); });
+addEventListener('keydown', function (e) { var k = e.key.toLowerCase(); input.keys[k] = true; if (k === 'h' || k === ' ') horn(); if (C.car === 'mgb' && C.manual) { if (k >= '1' && k <= '4') setGear(+k); if (k === 'r') setGear(-1); if (k === 'n' || k === '0') setGear(0); } if (e.key.indexOf('Arrow') === 0 || k === ' ') e.preventDefault(); });
 addEventListener('keyup', function (e) { input.keys[e.key.toLowerCase()] = false; });
 document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
 
@@ -1091,7 +1253,15 @@ function render(dt) {
   if (C.state === 'stall') m.root.position.y -= 0.6;
   spin += C.spd * dt / 0.33;
   A.wheels.forEach(function (w) { w.rotation.x = spin; });
-  A.front.forEach(function (w) { w.rotation.order = 'YXZ'; w.rotation.y = -C.steer * VEH[C.car].steer; });
+  A.front.forEach(function (w) { w.rotation.order = 'YXZ'; w.rotation.y = A.casters ? -C.steer * 1.2 : -C.steer * VEH[C.car].steer; });
+  if (A.arm) {
+    var tgt = input.loaderUp ? 1 : 0;
+    if (input.keys.q) tgt = 1; if (input.keys.e) tgt = 0;
+    if (input.keys.q || input.keys.e) input.loaderUp = !!input.keys.q;
+    A.loader += (tgt - A.loader) * Math.min(1, dt * 1.5);
+    A.arm.rotation.x = -A.loader * 0.75;                   // raise arms
+    A.bucket.rotation.x = A.loader * 0.55 - 0.05;          // keep bucket roughly level / curled
+  }
   if (A.trailer) {
     var hx = C.x - Math.sin(C.yaw) * A.hitch, hz = C.z - Math.cos(C.yaw) * A.hitch;
     if (C.tx === null || C.tx === undefined) { C.tx = hx - Math.sin(C.yaw) * A.trailerLen; C.tz = hz - Math.cos(C.yaw) * A.trailerLen; }
@@ -1104,7 +1274,7 @@ function render(dt) {
   if (A.props) A.props.forEach(function (p, i) { p.rotation.z += (C.swim ? C.spd * 4 : 0) * dt * (i ? -1 : 1); });
   var fwx = Math.sin(C.yaw), fwz = Math.cos(C.yaw);
   if (game.cam === 0) {
-    var cd = C.car === 'jd' ? 17 : 8, ch = C.car === 'jd' ? 7 : 3.2;
+    var cd = C.car === 'jd' ? 17 : C.car === 'kubota' ? 10 : C.car === 'zt' || C.car === 'canam' ? 6.5 : 8, ch = C.car === 'jd' ? 7 : C.car === 'kubota' ? 4.5 : 3.2;
     var want = _v.set(C.x - fwx * cd, C.y + ch, C.z - fwz * cd);
     var g = Math.max(groundH(want.x, want.z), 0) + 1; if (want.y < g) want.y = g;
     camPos.lerp(want, 1 - Math.exp(-dt * 4)); camera.position.copy(camPos); lookAt.set(C.x + fwx * 3, C.y + 1, C.z + fwz * 3); camera.lookAt(lookAt);
