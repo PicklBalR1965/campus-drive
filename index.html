@@ -120,9 +120,36 @@
   #shifter .srow b { font-size: 20px; color: #cf9f2b; width: 30px; text-align: center; }
   #shifter .srow button { border: none; border-radius: 10px; background: #cf9f2b; color: #111; font-weight: 800; padding: 6px 10px; font-size: 12px; }
   #shifter.auto .gate { opacity: .3; pointer-events: none; }
+  #bTop { position: fixed; z-index: 6; left: calc(env(safe-area-inset-left) + 18px); bottom: calc(env(safe-area-inset-bottom) + 148px); }
   #bHorn { right: calc(env(safe-area-inset-right) + 126px); bottom: calc(env(safe-area-inset-bottom) + 126px); width: 96px; height: 42px; background: rgba(40,40,46,.8); font-size: 14px; }
   .pedal.down { filter: brightness(1.35); transform: scale(.96); }
   #carRow .opt { flex: 1 1 150px; }
+
+  /* ---- phones ---- */
+  @media (max-width: 600px), (max-height: 500px) {
+    #stats { padding: 5px 8px; font-size: 10px; gap: 0 8px; border-radius: 10px; }
+    #stats b { font-size: 11px; }
+    #planeName { font-size: 9px; }
+    #topbtns { gap: 4px; max-width: 55vw; }
+    .tb { padding: 5px 8px; font-size: 11px; border-radius: 9px; }
+    #msg { font-size: 17px; }
+    #ringInfo { font-size: 12px; padding: 4px 10px; }
+    .card { padding: 14px 14px; } .card h1 { font-size: 22px; } .opt svg { height: 34px; }
+    #bTop { left: calc(env(safe-area-inset-left) + 10px); bottom: calc(env(safe-area-inset-bottom) + 96px); }
+    #wheel { width: 150px; height: 78px; border-radius: 40px; left: calc(env(safe-area-inset-left) + 10px); bottom: calc(env(safe-area-inset-bottom) + 10px); font-size: 10px; }
+    .pedal { border-radius: 12px; font-size: 12px; bottom: calc(env(safe-area-inset-bottom) + 10px); }
+    #bGas { width: 62px; height: 98px; right: calc(env(safe-area-inset-right) + 10px); }
+    #bBrake { width: 62px; height: 62px; right: calc(env(safe-area-inset-right) + 80px); }
+    #bHorn { width: 62px; height: 30px; font-size: 11px; right: calc(env(safe-area-inset-right) + 80px); bottom: calc(env(safe-area-inset-bottom) + 80px); }
+    #bLoader { width: 62px; height: 30px; font-size: 11px; right: calc(env(safe-area-inset-right) + 10px); bottom: calc(env(safe-area-inset-bottom) + 116px); }
+    #shifter { width: 104px; padding: 5px; border-radius: 12px; right: calc(env(safe-area-inset-right) + 150px); bottom: calc(env(safe-area-inset-bottom) + 10px); }
+    #shifter .gate { grid-template-rows: 28px 13px 28px; gap: 3px; }
+    #shifter .gp { width: 28px; height: 28px; font-size: 12px; }
+    #shifter .gp.n { width: 24px; height: 13px; font-size: 8px; }
+    #shifter .srow { margin-top: 4px; } #shifter .srow b { font-size: 15px; } #shifter .srow button { padding: 4px 7px; font-size: 10px; }
+  }
+  /* very narrow portrait phones: put the shifter above the pedals */
+  @media (max-width: 420px) { #shifter { right: calc(env(safe-area-inset-right) + 10px); bottom: calc(env(safe-area-inset-bottom) + 154px); } #bLoader { bottom: calc(env(safe-area-inset-bottom) + 154px); } }
 </style>
 </head>
 <body>
@@ -148,6 +175,7 @@
   <div class="srow"><b id="gearBadge">1</b><button id="bTrans">Manual</button></div>
 </div>
 <button class="pedal" id="bLoader" style="display:none">⬆ Loader</button>
+<button class="tb" id="bTop" style="display:none">☔ Top up</button>
 <button class="pedal" id="bBrake">BRAKE<br>REV</button>
 <button class="pedal" id="bGas">GAS</button>
 <div id="menu">
@@ -157,7 +185,7 @@
     <h3>Pick your ride</h3>
     <div class="row" id="carRow"></div>
     <h3>How to drive</h3>
-    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn · <b>Q / E</b> raise / lower the Kubota's loader</li><li><b>MGB stick shift:</b> tap a gear on the shifter (or keys <b>1–4</b>, <b>R</b>, <b>N</b>). Start in 1st and shift up as it revs. Tap <b>Manual</b> to switch to automatic.</li></ul>
+    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn · <b>Q / E</b> raise / lower the Kubota's loader</li><li><b>MGB stick shift:</b> tap a gear on the shifter (or keys <b>1–4</b>, <b>R</b>, <b>N</b>). Start in 1st and shift up as it revs. Tap <b>Manual</b> to switch to automatic. Tap <b>Top up</b> (or <b>T</b>) to raise or lower the convertible top.</li></ul>
     <button id="go">Drive! 🚗</button>
   </div>
 </div>
@@ -721,7 +749,7 @@ var stars = STAR_SPOTS.map(function (p) {
 
 // ---------------- Vehicles ----------------
 var VEH = {
-  mgb: { name: '1973 MGB', sub: 'Classic British roadster in mustard yellow', max: 28, acc: 6.5, steer: 0.55, wb: 2.3, grip: 0.92, swim: false, wade: 0.35, r: 1.7 },
+  mgb: { name: '1973 MGB', sub: 'Mustard-yellow convertible roadster · 4-speed stick', max: 28, acc: 6.5, steer: 0.55, wb: 2.3, grip: 0.92, swim: false, wade: 0.35, r: 1.7 },
   amphi: { name: 'Amphi Cruiser', sub: 'Amphibious car — drives into the pond, pool & creek', max: 17, acc: 4.8, steer: 0.55, wb: 2.2, grip: 0.85, swim: true, wade: 9, r: 1.7, waterMax: 6.5 },
   utv: { name: 'Farm UTV', sub: 'Off-road utility vehicle with a dump bed', max: 16, acc: 6, steer: 0.6, wb: 2.0, grip: 0.9, swim: false, wade: 0.7, r: 1.5 },
   kubota: { name: 'Kubota MX6000', sub: 'Orange tractor with a working front-end loader', max: 9, acc: 3.4, steer: 0.62, wb: 2.3, grip: 0.95, swim: false, wade: 0.6, r: 2.0 },
@@ -756,7 +784,18 @@ function buildMGB() {
   var sw = new THREE.TorusGeometry(0.17, 0.02, 6, 16); var swm = mesh(sw, BLACK, 0.32, 1.1, 0.12); swm.rotation.x = -0.5; root.add(swm);
   var ws = cbox(1.36, 0.36, 0.03, GLASS, 0, 1.12, 0.42); ws.rotation.x = -0.35; root.add(ws);
   root.add(cbox(1.4, 0.04, 0.05, CHROME, 0, 1.29, 0.36));
-  root.add(cbox(1.2, 0.12, 0.45, lam(0x222222), 0, 0.93, -1.0));                  // folded top
+  var boot = cbox(1.25, 0.14, 0.42, lam(0x222222), 0, 0.95, -1.02); root.add(boot); A.boot = boot;       // folded top (boot cover)
+  // convertible soft top: hinged at the rear of the cockpit, unfolds forward to the windshield header
+  var topG = new THREE.Group(); topG.position.set(0, 0.92, -1.12);
+  var prof = new THREE.Shape(); prof.moveTo(0, 0); prof.lineTo(0.05, 0.4); prof.quadraticCurveTo(0.6, 0.52, 1.48, 0.38); prof.lineTo(1.48, 0.33); prof.quadraticCurveTo(0.6, 0.46, 0.1, 0.35); prof.lineTo(0.06, 0); prof.lineTo(0, 0);
+  var roofSide = new THREE.ExtrudeGeometry(prof, { depth: 1.3, bevelEnabled: false }); roofSide.translate(0, 0, -0.65); roofSide.rotateY(-Math.PI / 2);
+  var canvasTop = lam(0x1b1c1f), rearWin = new THREE.MeshPhongMaterial({ color: 0x9fc3e0, transparent: true, opacity: 0.45 });
+  var roof = new THREE.Mesh(roofSide, canvasTop); topG.add(roof);
+  [-1, 1].forEach(function (s) { var side = new THREE.Shape(); side.moveTo(0.05, 0); side.lineTo(1.4, 0.0); side.lineTo(1.46, 0.36); side.quadraticCurveTo(0.6, 0.48, 0.08, 0.38); side.lineTo(0.05, 0);
+    var sg = new THREE.ShapeGeometry(side); sg.rotateY(-Math.PI / 2); var sm = new THREE.Mesh(sg, canvasTop); sm.material.side = THREE.DoubleSide; sm.position.x = s * 0.66; topG.add(sm);
+    var win = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.22), rearWin); win.rotation.y = s * Math.PI / 2; win.position.set(s * 0.665, 0.2, 0.75); topG.add(win); });
+  var rw = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.22), rearWin); rw.position.set(0, 0.22, 0.03); rw.rotation.x = -0.12; topG.add(rw);
+  root.add(topG); A.softTop = topG; A.topAmt = 0;
   root.add(cbox(1.66, 0.1, 0.12, CHROME, 0, 0.42, 2.02), cbox(1.62, 0.1, 0.12, CHROME, 0, 0.42, -2.0));   // chrome bumpers
   root.add(cbox(0.7, 0.22, 0.05, BLACK, 0, 0.6, 2.04), cbox(0.76, 0.26, 0.03, CHROME, 0, 0.6, 2.03));
   [-0.55, 0.55].forEach(function (x) {
@@ -982,7 +1021,7 @@ function spawnCar() {
   C.tx = null;
   $('carName').textContent = VEH[C.car].name.toUpperCase();
   C.gear = 1; if (typeof syncShifter === 'function') syncShifter();
-  $('bLoader').style.display = C.car === 'kubota' ? '' : 'none'; input.loaderUp = false; $('bLoader').textContent = '⬆ Loader';
+  $('bLoader').style.display = C.car === 'kubota' ? '' : 'none'; $('bTop').style.display = C.car === 'mgb' ? '' : 'none'; $('bTop').textContent = C.topUp ? '☀️ Top down' : '☔ Top up'; input.loaderUp = false; $('bLoader').textContent = '⬆ Loader';
   if (typeof camPos !== 'undefined') camPos.set(C.x - Math.sin(C.yaw) * 8, C.y + 3.2, C.z - Math.cos(C.yaw) * 8);
 }
 function surface(x, z) { var g = groundH(x, z); return { g: g, water: g < -0.05, depth: Math.max(0, -g) }; }
@@ -1219,6 +1258,7 @@ function syncShifter() {
   $('bTrans').textContent = C.manual ? 'Manual' : 'Auto';
   if (on) setGear(C.manual ? C.gear : 1);
 }
+$('bTop').addEventListener('pointerdown', function (e) { e.preventDefault(); C.topUp = !C.topUp; $('bTop').textContent = C.topUp ? '☀️ Top down' : '☔ Top up'; tone(220, 0.25, 0, 'triangle', 0.04); });
 $('bLoader').addEventListener('pointerdown', function (e) { e.preventDefault(); input.loaderUp = !input.loaderUp; $('bLoader').textContent = input.loaderUp ? '⬇ Loader' : '⬆ Loader'; });
 function hold(el, key) { el.addEventListener('pointerdown', function (e) { e.preventDefault(); initAudio(); input[key] = true; el.classList.add('down'); try { el.setPointerCapture(e.pointerId); } catch (er) {} }); var up = function () { input[key] = false; el.classList.remove('down'); }; el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up); }
 hold($('bGas'), 'gas'); hold($('bBrake'), 'brake');
@@ -1228,7 +1268,7 @@ hold($('bGas'), 'gas'); hold($('bBrake'), 'brake');
   el.addEventListener('pointermove', function (e) { if (e.pointerId !== id) return; input.steer = clamp((e.clientX - sx) / (el.clientWidth * 0.45), -1, 1); });
   var end = function (e) { if (e.pointerId !== id) return; id = null; input.steer = 0; }; el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
 })();
-addEventListener('keydown', function (e) { var k = e.key.toLowerCase(); input.keys[k] = true; if (k === 'h' || k === ' ') horn(); if (C.car === 'mgb' && C.manual) { if (k >= '1' && k <= '4') setGear(+k); if (k === 'r') setGear(-1); if (k === 'n' || k === '0') setGear(0); } if (e.key.indexOf('Arrow') === 0 || k === ' ') e.preventDefault(); });
+addEventListener('keydown', function (e) { var k = e.key.toLowerCase(); input.keys[k] = true; if (k === 'h' || k === ' ') horn(); if (k === 't' && C.car === 'mgb') $('bTop').dispatchEvent(new PointerEvent('pointerdown')); if (C.car === 'mgb' && C.manual) { if (k >= '1' && k <= '4') setGear(+k); if (k === 'r') setGear(-1); if (k === 'n' || k === '0') setGear(0); } if (e.key.indexOf('Arrow') === 0 || k === ' ') e.preventDefault(); });
 addEventListener('keyup', function (e) { input.keys[e.key.toLowerCase()] = false; });
 document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
 
@@ -1254,6 +1294,11 @@ function render(dt) {
   spin += C.spd * dt / 0.33;
   A.wheels.forEach(function (w) { w.rotation.x = spin; });
   A.front.forEach(function (w) { w.rotation.order = 'YXZ'; w.rotation.y = A.casters ? -C.steer * 1.2 : -C.steer * VEH[C.car].steer; });
+  if (A.softTop) {
+    A.topAmt += ((C.topUp ? 1 : 0) - A.topAmt) * Math.min(1, dt * 2.2);
+    var ta = A.topAmt; A.softTop.visible = ta > 0.03; A.softTop.scale.set(1, 0.3 + 0.7 * ta, Math.max(0.05, ta)); A.softTop.rotation.x = (1 - ta) * 0.5;
+    A.boot.visible = ta < 0.6;
+  }
   if (A.arm) {
     var tgt = input.loaderUp ? 1 : 0;
     if (input.keys.q) tgt = 1; if (input.keys.e) tgt = 0;
@@ -1296,7 +1341,7 @@ window.__drive = function (secs, cfg) {
   for (var t = 0; t < secs; t += 1 / 60) update(1 / 60); render(1 / 60);
   return { x: +C.x.toFixed(1), y: +C.y.toFixed(2), z: +C.z.toFixed(1), spd: +C.spd.toFixed(1), swim: C.swim, air: C.air, state: C.state, stars: game.got };
 };
-window.__C = C; window.__input = input; window.__game = game; window.CarAudio = CarAudio;
+window.__C = C; window.__input = input; window.__game = game; window.CarAudio = CarAudio; window.__models = models;
 buildMenu(); spawnCar(); requestAnimationFrame(frame);
 })();
 
