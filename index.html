@@ -211,7 +211,7 @@
     <div class="row" id="carRow"></div>
     <div class="toggles" style="margin-top:10px"><button class="tog" id="tSnow"><i></i><span>❄️ Snow day<small>Snow covers campus — clear the driveways and lots with the Kubota MX6000 or the Can-Am plow</small></span></button></div>
     <h3>How to drive</h3>
-    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn · <b>Q / E</b> raise / lower the Kubota's loader or the Bobcat's lift arm · <b>H</b> horn</li><li><b>Zero-turn:</b> push both lap bars forward to go, push one further to turn, pull them back to reverse, and push one forward with the other back to spin in place. The throttle toggles between 🐢 LOW and 🐇 HIGH (keys: <b>W/S</b> left bar, <b>↑/↓</b> right bar, <b>T</b> throttle).</li><li><b>MGB stick shift:</b> drag the knob through the H-pattern (or <b>Shift</b> to shift up, <b>Ctrl</b> to shift down, or keys <b>1–4</b>, <b>R</b>, <b>N</b>). Start in 1st and shift up as it revs. Tap <b>Manual</b> to switch to automatic. Tap <b>Top up</b> (or <b>T</b>) to raise or lower the convertible top.</li></ul>
+    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn · <b>W / S</b> raise / lower the Kubota's loader, plow or the Bobcat's lift arm · <b>H</b> horn</li><li><b>Zero-turn:</b> push both lap bars forward to go, push one further to turn, pull them back to reverse, and push one forward with the other back to spin in place. The throttle toggles between 🐢 LOW and 🐇 HIGH (keys: <b>W/S</b> left bar, <b>↑/↓</b> right bar, <b>T</b> throttle).</li><li><b>MGB stick shift:</b> drag the knob through the H-pattern (or <b>Shift</b> to shift up, <b>Ctrl</b> to shift down, or keys <b>1–4</b>, <b>R</b>, <b>N</b>). Start in 1st and shift up as it revs. Tap <b>Manual</b> to switch to automatic. Tap <b>Top up</b> (or <b>T</b>) to raise or lower the convertible top.</li></ul>
     <button id="go">Drive! 🚗</button>
   </div>
 </div>
@@ -1516,7 +1516,7 @@ function buildMenu() {
   });
 }
 $('go').onclick = function () { initAudio(); spawnCar(); game.playing = true; game.paused = false; $('menu').classList.add('hidden'); document.body.classList.add('playing');
-  if (SNOW.on) toast(models[C.car].A.plow ? '❄️ Snow day! Plow the campus driveways and lots.\nQ/E (or Loader) lifts the blade.' : '❄️ Snow day! Pick the Kubota or the Can-Am to plow.', 3.5);
+  if (SNOW.on) toast(models[C.car].A.plow ? '❄️ Snow day! Plow the campus driveways and lots.\nW raises the blade · S lowers it (or the Loader button).' : '❄️ Snow day! Pick the Kubota or the Can-Am to plow.', 3.5);
   else toast('Find all ' + stars.length + ' gold stars around campus!', 3); };
 $('tSnow').onclick = function () { setSnow(!SNOW.on); $('tSnow').classList.toggle('on', SNOW.on); if (SNOW.on && !models[C.car].A.plow) { C.car = 'kubota'; buildMenu(); } };
 $('bMenu').onclick = function () { game.paused = true; buildMenu(); $('menu').classList.remove('hidden'); document.body.classList.remove('playing'); $('menu').scrollTop = 0; };
@@ -1644,7 +1644,7 @@ function render(dt) {
   if (A.arm) {
     var tgt = input.loaderUp ? 1 : 0;
     if (input.keys.q) tgt = 1; if (input.keys.e) tgt = 0;
-    if (input.keys.q || input.keys.e) input.loaderUp = !!input.keys.q;
+    if (C.car !== 'zt' && (input.keys.q || input.keys.e || input.keys.w || input.keys.s)) { input.loaderUp = !!(input.keys.q || input.keys.w); $('bLoader').textContent = input.loaderUp ? '⬇ Loader' : '⬆ Loader'; }
     A.loader += (tgt - A.loader) * Math.min(1, dt * 1.5);
     A.arm.rotation.x = -A.loader * 0.75;                   // raise arms
     A.bucket.rotation.x = A.loader * 0.55 - 0.05;          // keep bucket roughly level / curled
