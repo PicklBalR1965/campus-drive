@@ -449,7 +449,7 @@ var CAMPUSMAP = (function () {
     { t: 'Gaga Pit', x: 177, z: 51, h: 10, c: '#ffb36b' },
     { t: 'Drop Off & Pickup', x: 97, z: 62, h: 12, c: '#ffd94f' },
     { t: 'Lunch', x: 13, z: 20, h: 12, c: '#ffd94f' },
-    { t: 'Sand Volleyball', x: 125, z: -64, h: 10 },
+    { t: 'Ball Field · Softball, Kickball & Baseball', x: 125, z: -54, h: 12, c: '#ffb36b' },
     { t: 'Garden', x: -6, z: 88, h: 8, c: '#8ff0a8' },
     { t: 'Fire Circle', x: 62, z: 96, h: 8 },
     { t: 'Shuffleboard & Chess', x: -98, z: 44, h: 8 },
@@ -683,9 +683,17 @@ var CAMPUSMAP = (function () {
     // Gaga pit: low octagon wall on the round pad
     (function () { var GX = 177, GZ = 51, R = 4.6, gy3 = ground(GX, GZ); for (var i = 0; i < 8; i++) { var a = (i + 0.5) / 8 * Math.PI * 2, side = 2 * R * Math.tan(Math.PI / 8); var m = new THREE.Mesh(new THREE.BoxGeometry(side, 0.9, 0.18), lamb(0x8a6440)); m.position.set(o.x + GX + Math.cos(a) * R, gy3 + 0.45, o.z + GZ + Math.sin(a) * R); m.rotation.y = -a + Math.PI / 2; add(m); } cb.solid(o.x + GX - R, o.x + GX + R, o.z + GZ - R, o.z + GZ + R, gy3 + 0.9); })();
 
-    // Sand volleyball net
-    [[-8, 0], [8, 0]].forEach(function (p) { post(125 + p[0], -54 + p[1], 2.6, 0xeeeeee); });
-    bx(16, 0.9, 0.04, new THREE.MeshLambertMaterial({ color: 0x222222, transparent: true, opacity: 0.6 }), 125, -54, 1.6);
+    // Ball field (softball / kickball / baseball): dirt infield diamond, bases, mound and backstop
+    (function () { var BX = 125, BZ = -54, D = 6.5;
+      [[0, D], [D, 0], [0, -D]].forEach(function (b) { var m = bx(0.6, 0.12, 0.6, 0xffffff, BX + b[0], BZ + b[1], 0.05); m.rotation.y = Math.PI / 4; });
+      var hp = bx(0.6, 0.06, 0.6, 0xffffff, BX - D, BZ, 0.05); hp.rotation.y = Math.PI / 4;
+      cyl(1.2, 1.4, 0.25, 0xc9a874, BX, BZ, 0, 16); bx(0.6, 0.06, 0.15, 0xffffff, BX, BZ, 0.25);
+      [[-1, -1], [-1, 1]].forEach(function (k) { var L = 30, a = Math.atan2(k[1], 1); var ln = new THREE.Mesh(new THREE.PlaneGeometry(L, 0.15), lamb(0xffffff)); ln.rotation.order = 'YXZ'; ln.rotation.set(-Math.PI / 2, -a, 0); ln.position.set(o.x + BX - D + Math.cos(a) * L / 2, ground(BX, BZ) + 0.12, o.z + BZ + Math.sin(a) * L / 2); scene.add(ln); });
+      var back = new THREE.MeshLambertMaterial({ color: 0x8c9399, transparent: true, opacity: 0.4 });
+      [[-0.6, 0, 0.06, 6], [0.6, -2.4, 2.5, 0.06], [0.6, 2.4, 2.5, 0.06]].forEach(function (f, i) { var m = new THREE.Mesh(new THREE.BoxGeometry(f[2], 3.5, f[3]), back); m.position.set(o.x + BX - D - 3 + f[0], ground(BX, BZ) + 1.75, o.z + BZ + f[1]); if (i) m.rotation.y = i === 1 ? 0.6 : -0.6; scene.add(m); });
+      cb.solid(o.x + BX - D - 3.7, o.x + BX - D - 3.5, o.z + BZ - 3, o.z + BZ + 3, ground(BX, BZ) + 3.5);
+      [-1, 1].forEach(function (sd) { bx(5, 0.45, 0.5, 0x8b6a4a, BX - D - 2, BZ + sd * 7, 0); });
+    })();
 
     // Drop off & pickup: bus pull-off and a yellow camp bus
     flat(7, 26, lamb(surfColor('gravel')), 104, 62, 0.075);
