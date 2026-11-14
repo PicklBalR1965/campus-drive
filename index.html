@@ -209,7 +209,7 @@
     <h3>Pick your ride</h3>
     <div class="row" id="carRow"></div>
     <h3>How to drive</h3>
-    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn · <b>Q / E</b> raise / lower the Kubota's loader</li><li><b>Zero-turn:</b> push both lap bars forward to go, push one further to turn, pull them back to reverse, and push one forward with the other back to spin in place. The throttle toggles between 🐢 LOW and 🐇 HIGH (keys: <b>W/S</b> left bar, <b>↑/↓</b> right bar, <b>T</b> throttle).</li><li><b>MGB stick shift:</b> drag the knob through the H-pattern (or <b>Shift</b> to shift up, <b>Ctrl</b> to shift down, or keys <b>1–4</b>, <b>R</b>, <b>N</b>). Start in 1st and shift up as it revs. Tap <b>Manual</b> to switch to automatic. Tap <b>Top up</b> (or <b>T</b>) to raise or lower the convertible top.</li></ul>
+    <ul class="help"><li><b>Left pad</b> — slide left/right to steer</li><li><b>GAS</b> to go · <b>BRAKE</b> to stop (hold it to back up) · <b>Horn</b> for fun</li><li>Only the <b>Amphi Cruiser</b> can drive into the pond, the pool and the creek. Hit the jump ramp in the big field!</li><li>Keyboard: <b>A / D</b> steer (left hand) · <b>↑ / ↓</b> gas and brake (right hand) · <b>Space</b> horn · <b>Q / E</b> raise / lower the Kubota's loader or the Bobcat's lift arm · <b>H</b> horn</li><li><b>Zero-turn:</b> push both lap bars forward to go, push one further to turn, pull them back to reverse, and push one forward with the other back to spin in place. The throttle toggles between 🐢 LOW and 🐇 HIGH (keys: <b>W/S</b> left bar, <b>↑/↓</b> right bar, <b>T</b> throttle).</li><li><b>MGB stick shift:</b> drag the knob through the H-pattern (or <b>Shift</b> to shift up, <b>Ctrl</b> to shift down, or keys <b>1–4</b>, <b>R</b>, <b>N</b>). Start in 1st and shift up as it revs. Tap <b>Manual</b> to switch to automatic. Tap <b>Top up</b> (or <b>T</b>) to raise or lower the convertible top.</li></ul>
     <button id="go">Drive! 🚗</button>
   </div>
 </div>
@@ -695,10 +695,8 @@ var CAMPUSMAP = (function () {
       [-1, 1].forEach(function (sd) { bx(5, 0.45, 0.5, 0x8b6a4a, BX - D - 2, BZ + sd * 7, 0); });
     })();
 
-    // Drop off & pickup: bus pull-off and a yellow camp bus
+    // Drop off & pickup: gravel pull-off
     flat(7, 26, lamb(surfColor('gravel')), 104, 62, 0.075);
-    bx(2.6, 3, 11, 0xf2b705, 105, 62, 0.5, 0, true); bx(2.62, 0.9, 10.6, 0x30343a, 105, 62, 2.1);
-    [[-3.6], [3.6]].forEach(function (w2) { [-1.35, 1.35].forEach(function (sx) { var wh = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.35, 14), lamb(0x1d1d1d)); wh.rotation.z = Math.PI / 2; wh.position.set(o.x + 105 + sx, ground(105, 62) + 0.55, o.z + 62 + w2[0]); scene.add(wh); }); });
 
     // Lunch: picnic tables under the camp pavilion
     shadeRoof(16, 34, 10, 6, 0x2e7d4f, 3, 0);
@@ -894,7 +892,7 @@ var stars = STAR_SPOTS.map(function (p) {
 var VEH = {
   mgb: { name: '1973 MGB', sub: 'Mustard-yellow convertible roadster · 4-speed stick', max: 28, acc: 6.5, steer: 0.55, wb: 2.3, grip: 0.92, swim: false, wade: 0.35, r: 1.7 },
   amphi: { name: 'Amphi Cruiser', sub: 'Amphibious car — drives into the pond, pool & creek', max: 17, acc: 4.8, steer: 0.55, wb: 2.2, grip: 0.85, swim: true, wade: 9, r: 1.7, waterMax: 6.5 },
-  utv: { name: 'Farm UTV', sub: 'Off-road utility vehicle with a dump bed', max: 16, acc: 6, steer: 0.6, wb: 2.0, grip: 0.9, swim: false, wade: 0.7, r: 1.5 },
+  bobcat: { name: 'Bobcat 5600 Toolcat', sub: 'Utility work machine · lift arm & bucket · dump box', max: 12, acc: 5, steer: 0.62, wb: 2.3, grip: 0.95, swim: false, wade: 0.7, r: 1.7 },
   kubota: { name: 'Kubota MX6000', sub: 'Orange tractor with a working front-end loader', max: 9, acc: 3.4, steer: 0.62, wb: 2.3, grip: 0.95, swim: false, wade: 0.6, r: 2.0 },
   jd: { name: '1973 John Deere 4230', sub: 'Tractor pulling the Camp Curiosity hay wagon', max: 8, acc: 3, steer: 0.6, wb: 2.6, grip: 0.95, swim: false, wade: 0.6, r: 1.9 },
   zt: { name: 'John Deere 72" Zero-Turn', sub: 'Commercial mower — spins in place and leaves clippings', max: 6.5, acc: 4, steer: 0.6, wb: 1.6, grip: 0.95, swim: false, wade: 0.35, r: 1.6, zeroTurn: true },
@@ -916,7 +914,7 @@ function wheelSet(root, r, w, xs, zs, hubMat) {
   return ws;
 }
 function buildMGB() {
-  var root = new THREE.Group(), A = {}, paint = new THREE.MeshPhongMaterial({ color: 0xcf9f2b, shininess: 70, specular: 0x665533 });
+  var root = new THREE.Group(), A = {}, paint = new THREE.MeshPhongMaterial({ color: 0xd8951c, shininess: 85, specular: 0x776644 });
   var s = new THREE.Shape();
   s.moveTo(-1.95, 0.32); s.lineTo(-1.95, 0.72); s.quadraticCurveTo(-1.9, 0.86, -1.5, 0.88); s.lineTo(-0.55, 0.9); s.lineTo(0.35, 0.9);
   s.lineTo(1.4, 0.84); s.quadraticCurveTo(1.92, 0.78, 1.97, 0.55); s.lineTo(1.97, 0.32); s.lineTo(-1.95, 0.32);
@@ -941,6 +939,10 @@ function buildMGB() {
   root.add(topG); A.softTop = topG; A.topAmt = 0;
   root.add(cbox(1.66, 0.1, 0.12, CHROME, 0, 0.42, 2.02), cbox(1.62, 0.1, 0.12, CHROME, 0, 0.42, -2.0));   // chrome bumpers
   root.add(cbox(0.7, 0.22, 0.05, BLACK, 0, 0.6, 2.04), cbox(0.76, 0.26, 0.03, CHROME, 0, 0.6, 2.03));
+  for (var gb = 0; gb < 9; gb++) root.add(cbox(0.02, 0.2, 0.02, CHROME, -0.32 + gb * 0.08, 0.6, 2.07));            // grille slats
+  [-0.36, 0.36].forEach(function (x) { root.add(cbox(0.08, 0.22, 0.1, CHROME, x, 0.46, 2.08)); });                  // bumper overriders
+  [-0.62, 0.62].forEach(function (x) { root.add(cbox(0.14, 0.07, 0.03, new THREE.MeshBasicMaterial({ color: 0xff9a1a }), x, 0.5, 2.0)); });   // amber indicators
+  root.add(cbox(0.08, 0.08, 0.02, lam(0xb01c1c), 0, 0.74, 2.06));                                                   // MG badge
   [-0.55, 0.55].forEach(function (x) {
     var hl = new THREE.CylinderGeometry(0.12, 0.12, 0.08, 16); hl.rotateX(Math.PI / 2); root.add(mesh(hl, CHROME, x, 0.68, 1.96), mesh(new THREE.CircleGeometry(0.1, 16), LIGHT, x, 0.68, 2.01));
     root.add(cbox(0.22, 0.12, 0.04, TAIL, x * 1.05, 0.66, -2.0));
@@ -967,16 +969,51 @@ function buildAmphi() {
   A.cam = new V3(0, 1.4, -0.3);
   return { root: root, A: A };
 }
-function buildUTV() {
-  var root = new THREE.Group(), A = {}, paint = lam(0x3d6b35), seat = lam(0x222222);
-  root.add(cbox(1.5, 0.35, 2.9, paint, 0, 0.62, 0), cbox(1.4, 0.5, 0.8, paint, 0, 0.9, 1.05));
-  root.add(cbox(1.3, 0.12, 0.6, seat, 0, 0.88, -0.05), cbox(1.3, 0.5, 0.12, seat, 0, 1.1, -0.35));
-  root.add(cbox(1.45, 0.45, 1.1, lam(0x2f5a2a), 0, 1.0, -1.0));
-  [[-0.68, 0.6], [0.68, 0.6], [-0.68, -0.45], [0.68, -0.45]].forEach(function (p) { root.add(cbox(0.06, 1.2, 0.06, BLACK, p[0], 1.4, p[1])); });
-  root.add(cbox(1.45, 0.06, 1.15, BLACK, 0, 2.0, 0.08));
-  [-0.5, 0.5].forEach(function (x) { root.add(mesh(new THREE.CircleGeometry(0.09, 12), LIGHT, x, 0.95, 1.46)); });
-  A.wheels = wheelSet(root, 0.38, 0.28, [-0.72, 0.72], [1.0, -0.95], lam(0xf2c230)); A.front = [A.wheels[0], A.wheels[2]];
-  A.cam = new V3(0, 1.6, 0.0);
+function decalMat(txt, bg, fg, w, h, font) { var c = document.createElement('canvas'); c.width = w || 256; c.height = h || 64; var x = c.getContext('2d'); x.fillStyle = bg; x.fillRect(0, 0, c.width, c.height); x.fillStyle = fg; x.font = font || 'bold 36px Arial'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(txt, c.width / 2, c.height / 2 + 2); var t = new THREE.CanvasTexture(c); t.anisotropy = 4; return new THREE.MeshLambertMaterial({ map: t }); }
+function buildBobcat() {   // Bobcat 5600 Toolcat: black cab, white nose & dump box, orange rims, side-mounted lift arm
+  var root = new THREE.Group(), A = {}, white = new THREE.MeshPhongMaterial({ color: 0xf2f2ef, shininess: 60 }), blk = lam(0x18191c), org = new THREE.MeshPhongMaterial({ color: 0xe8541a, shininess: 50 }), gray = lam(0x3c3f44);
+  root.add(cbox(1.45, 0.42, 3.5, blk, 0, 0.62, -0.05));                                   // frame
+  root.add(cbox(1.42, 0.55, 0.85, white, 0, 1.02, 1.35), cbox(1.44, 0.2, 0.85, blk, 0, 0.72, 1.35));   // white nose
+  root.add(cbox(1.2, 0.4, 0.05, blk, 0, 0.98, 1.79));
+  [-0.5, 0.5].forEach(function (x) { root.add(mesh(new THREE.CircleGeometry(0.08, 12), LIGHT, x, 1.1, 1.8)); });
+  // cab
+  root.add(cbox(1.48, 1.3, 1.35, blk, 0, 1.75, 0.22));
+  var gl = GLASS;
+  root.add(cbox(1.2, 0.95, 0.03, gl, 0, 1.85, 0.91));
+  [-1, 1].forEach(function (s) { root.add(cbox(0.03, 0.85, 1.05, gl, s * 0.745, 1.88, 0.25)); root.add(cbox(0.04, 1.2, 0.06, blk, s * 0.745, 1.8, -0.28), cbox(0.04, 1.2, 0.06, blk, s * 0.745, 1.8, 0.78)); });
+  root.add(cbox(1.56, 0.1, 1.45, blk, 0, 2.45, 0.22));
+  for (var l = 0; l < 3; l++) root.add(mesh(new THREE.CircleGeometry(0.07, 10), LIGHT, -0.4 + l * 0.4, 2.42, 0.95));
+  root.add(cbox(0.14, 0.12, 0.14, new THREE.MeshBasicMaterial({ color: 0xffa21a }), 0.6, 2.56, -0.35));
+  var logo = decalMat('Bobcat', '#18191c', '#ffffff', 256, 64, 'bold 40px Arial');
+  [-1, 1].forEach(function (s) { var p = new THREE.Mesh(new THREE.PlaneGeometry(0.55, 0.14), logo); p.position.set(s * 0.75, 1.35, 0.1); p.rotation.y = s * Math.PI / 2; root.add(p); });
+  // dump box with the orange 4x4 stripe
+  root.add(cbox(1.56, 0.5, 1.35, white, 0, 1.2, -1.15), cbox(1.4, 0.06, 1.2, lam(0xdcdcd8), 0, 1.47, -1.15));
+  var stripe = decalMat('4x4          5600', '#e8541a', '#ffffff', 512, 64, 'bold 40px Arial');
+  [-1, 1].forEach(function (s) { var p = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 0.13), stripe); p.position.set(s * 0.785, 1.27, -1.15); p.rotation.y = s * Math.PI / 2; root.add(p); });
+  [-1, 1].forEach(function (s) { root.add(cbox(0.35, 0.08, 0.95, blk, s * 0.72, 1.12, 1.15), cbox(0.35, 0.08, 0.95, blk, s * 0.72, 1.02, -1.2)); });   // fenders
+  A.wheels = [];
+  function tire(x, z) {
+    var gW = new THREE.Group(); gW.position.set(x, 0.43, z);
+    var t = new THREE.CylinderGeometry(0.43, 0.43, 0.32, 20); t.rotateZ(Math.PI / 2); gW.add(mesh(t, TIRE));
+    var h = new THREE.CylinderGeometry(0.24, 0.24, 0.34, 14); h.rotateZ(Math.PI / 2); gW.add(mesh(h, org));
+    for (var s = 0; s < 12; s++) { var lug = cbox(0.36, 0.06, 0.09, TIRE); lug.position.y = 0.43; var pv = new THREE.Group(); pv.rotation.x = s * Math.PI / 6; pv.add(lug); gW.add(pv); }
+    root.add(gW); A.wheels.push(gW); return gW;
+  }
+  tire(-0.72, -1.2); tire(0.72, -1.2);
+  A.front = [tire(-0.72, 1.15), tire(0.72, 1.15)];
+  // lift arm: pivots on the cab's left front corner, runs forward and down to the bucket
+  var arm = new THREE.Group(); arm.position.set(0.86, 1.65, 0.75);
+  var boom = cbox(0.16, 0.26, 1.7, white, 0, -0.35, 0.75); boom.rotation.x = 0.42; arm.add(boom);
+  var boomB = cbox(0.17, 0.08, 1.7, blk, 0, -0.2, 0.75); boomB.rotation.x = 0.42; arm.add(boomB);
+  var cyl = new THREE.CylinderGeometry(0.05, 0.05, 1.2, 8); cyl.rotateX(Math.PI / 2); var cm = mesh(cyl, CHROME, -0.12, -0.75, 0.5); cm.rotation.x = 0.1; arm.add(cm);
+  arm.add(cbox(0.86, 0.1, 0.1, blk, -0.43, -0.95, 1.5));                    // cross bar to the quick-tach
+  var bucket = new THREE.Group(); bucket.position.set(-0.86, -1.02, 1.75);
+  var bk = lam(0x2a2b2e);
+  bucket.add(cbox(1.7, 0.06, 0.7, bk, 0, -0.32, 0.3), cbox(1.7, 0.66, 0.06, bk, 0, 0, -0.03), cbox(1.7, 0.07, 0.06, CHROME, 0, -0.34, 0.66));
+  [-0.85, 0.85].forEach(function (x) { bucket.add(cbox(0.05, 0.58, 0.68, bk, x, -0.04, 0.3)); });
+  arm.add(bucket); root.add(arm);
+  A.arm = arm; A.bucket = bucket; A.loader = 0;
+  A.cam = new V3(0, 2.0, 0.1);
   return { root: root, A: A };
 }
 scene.traverse(function (o) { if (o.isMesh && o !== water && o !== poolWater && !o.material.isShaderMaterial) { o.receiveShadow = true; if (o.geometry.type !== 'PlaneGeometry' && o.geometry.type !== 'CircleGeometry') o.castShadow = true; } });
@@ -994,9 +1031,11 @@ function buildKubota() {
   root.add(cbox(0.55, 0.12, 0.5, seatM, 0, 1.68, -0.85), cbox(0.55, 0.45, 0.12, seatM, 0, 1.93, -1.08));
   var sw = new THREE.TorusGeometry(0.19, 0.025, 6, 16); var swm = mesh(sw, BLACK, 0, 1.98, -0.3); swm.rotation.x = -0.9; root.add(swm);
   root.add(cbox(0.04, 0.4, 0.04, BLACK, 0, 1.82, -0.2));
-  [-0.6, 0.6].forEach(function (x) { root.add(cbox(0.09, 1.55, 0.09, dark, x, 2.5, -1.3)); });   // two-post ROPS
-  root.add(cbox(1.3, 0.09, 0.09, dark, 0, 3.25, -1.3));
-  root.add(cbox(1.45, 0.08, 1.25, orange, 0, 3.32, -0.85));                    // canopy
+  [[-0.68, -1.4], [0.68, -1.4], [-0.68, -0.2], [0.68, -0.2]].forEach(function (p) { root.add(cbox(0.08, 1.5, 0.08, dark, p[0], 2.5, p[1])); });   // cab posts
+  root.add(cbox(1.3, 1.2, 0.03, GLASS, 0, 2.55, -0.2), cbox(1.3, 1.2, 0.03, GLASS, 0, 2.55, -1.4));
+  [-0.68, 0.68].forEach(function (x) { root.add(cbox(0.03, 1.2, 1.15, GLASS, x, 2.55, -0.8)); });
+  root.add(cbox(1.55, 0.16, 1.45, orange, 0, 3.3, -0.8), cbox(1.4, 0.08, 1.3, dark, 0, 3.2, -0.8));   // orange cab roof
+  root.add(cbox(0.3, 0.3, 0.02, new THREE.MeshBasicMaterial({ color: 0xff6a00 }), 0, 2.4, -1.43));                       // slow-moving-vehicle sign
   var ex = new THREE.CylinderGeometry(0.06, 0.06, 1.2, 10); root.add(mesh(ex, BLACK, 0.3, 2.2, 1.0));
   // KUBOTA decal on hood sides
   var dec = (function () { var c = document.createElement('canvas'); c.width = 256; c.height = 64; var x = c.getContext('2d'); x.fillStyle = '#f26a10'; x.fillRect(0, 0, 256, 64); x.fillStyle = '#fff'; x.font = 'bold 40px Arial'; x.textAlign = 'center'; x.fillText('KUBOTA', 128, 46); var t = new THREE.CanvasTexture(c); t.anisotropy = 4; return new THREE.MeshLambertMaterial({ map: t }); })();
@@ -1037,13 +1076,14 @@ function buildZT() {
   root.add(cbox(0.95, 0.28, 1.9, dark, 0, 0.5, -0.05));                       // frame
   root.add(cbox(1.0, 0.55, 0.75, green, 0, 0.92, -0.65));                     // engine hood (rear)
   root.add(cbox(1.02, 0.06, 0.75, yellow, 0, 1.2, -0.65));
-  root.add(cbox(0.6, 0.14, 0.55, lam(0x222222), 0, 0.85, 0.0), cbox(0.6, 0.6, 0.12, lam(0x222222), 0, 1.12, -0.24));  // seat
+  root.add(cbox(0.6, 0.14, 0.55, yellow, 0, 0.85, 0.0), cbox(0.6, 0.6, 0.12, yellow, 0, 1.12, -0.24), cbox(0.62, 0.62, 0.04, lam(0x222222), 0, 1.12, -0.31));  // yellow seat
+  [-1, 1].forEach(function (s) { root.add(cbox(0.3, 0.18, 0.75, lam(0x222222), s * 0.68, 0.92, -0.55)); });   // black fender pods
   [-1, 1].forEach(function (s) {                                               // lap bars
     var bar = cbox(0.05, 0.05, 0.55, lam(0x777777), s * 0.33, 1.15, 0.38); root.add(bar);
     root.add(cbox(0.05, 0.4, 0.05, lam(0x777777), s * 0.33, 0.95, 0.12));
   });
-  [-0.55, 0.55].forEach(function (x) { root.add(cbox(0.07, 1.3, 0.07, dark, x, 1.3, -0.95)); });  // ROPS
-  root.add(cbox(1.15, 0.07, 0.07, dark, 0, 1.95, -0.95));
+  [-0.55, 0.55].forEach(function (x) { root.add(cbox(0.08, 1.4, 0.08, green, x, 1.35, -0.95)); });  // green ROPS
+  root.add(cbox(1.18, 0.08, 0.08, green, 0, 2.05, -0.95));
   root.add(cbox(0.25, 0.04, 0.6, green, 0, 0.62, 0.65));                       // foot pan
   // 72" (1.83 m) side-discharge deck
   var deck = cbox(1.9, 0.22, 1.05, green, 0, 0.35, 0.55); root.add(deck);
@@ -1072,12 +1112,16 @@ function buildCanAm() {
   var bm = new THREE.Mesh(bg, yel); bm.position.y = 0.72; root.add(bm);         // plastics
   [-1, 1].forEach(function (s) { root.add(cbox(0.32, 0.06, 0.75, yel, s * 0.6, 0.98, 0.72), cbox(0.32, 0.06, 0.75, yel, s * 0.6, 0.98, -0.72)); });  // fenders
   root.add(cbox(0.42, 0.18, 0.8, blk, 0, 1.12, -0.15));                       // seat
-  root.add(cbox(0.95, 0.05, 0.35, gray, 0, 1.12, 0.95), cbox(0.95, 0.05, 0.4, gray, 0, 1.12, -0.95));  // racks
+  root.add(cbox(0.95, 0.05, 0.35, blk, 0, 1.12, 0.95), cbox(0.95, 0.05, 0.4, blk, 0, 1.12, -0.95));  // racks
+  for (var rk = 0; rk < 4; rk++) { root.add(cbox(0.95, 0.04, 0.03, blk, 0, 1.16, 0.82 + rk * 0.09), cbox(0.95, 0.04, 0.03, blk, 0, 1.16, -1.12 + rk * 0.11)); }
+  root.add(cbox(0.42, 0.42, 0.1, blk, 0, 1.42, -0.62), cbox(0.42, 0.1, 0.3, blk, 0, 1.22, -0.45));   // MAX passenger seat + backrest
+  [-0.38, 0.38].forEach(function (x) { root.add(cbox(0.05, 0.45, 0.05, blk, x, 0.8, 1.2)); });       // brush guard uprights
+  root.add(cbox(0.82, 0.05, 0.05, blk, 0, 1.02, 1.22), cbox(0.15, 0.1, 0.1, CHROME, 0, 0.6, 1.2));   // guard top + winch
   root.add(cbox(0.05, 0.4, 0.05, blk, 0, 1.2, 0.5));                           // steering post
   root.add(cbox(0.8, 0.04, 0.04, blk, 0, 1.42, 0.48));                         // handlebar
   [-0.4, 0.4].forEach(function (x) { root.add(cbox(0.06, 0.08, 0.08, blk, x, 1.42, 0.48)); });
   [-0.22, 0.22].forEach(function (x) { root.add(mesh(new THREE.CircleGeometry(0.07, 12), LIGHT, x, 0.98, 1.06)); });
-  root.add(cbox(0.9, 0.14, 0.08, gray, 0, 0.62, 1.12));                        // front bumper
+  root.add(cbox(0.9, 0.14, 0.08, blk, 0, 0.62, 1.12));                        // front bumper
   A.wheels = [];
   function tire(x, z) {
     var gW = new THREE.Group(); gW.position.set(x, 0.36, z);
@@ -1106,7 +1150,7 @@ function buildJD() {
   [[-0.62, -0.25], [0.62, -0.25], [-0.62, -1.3], [0.62, -1.3]].forEach(function (p) { root.add(cbox(0.08, 1.4, 0.08, green, p[0], 2.45, p[1])); });  // ROPS
   root.add(cbox(1.5, 0.1, 1.4, green, 0, 3.15, -0.78));               // canopy roof
   [-0.6, 0.6].forEach(function (x) { root.add(cbox(0.14, 0.08, 0.06, new THREE.MeshBasicMaterial({ color: 0xff9a1a }), x, 3.12, -0.06)); });
-  var ex = new THREE.CylinderGeometry(0.07, 0.07, 1.5, 10); root.add(mesh(ex, BLACK, 0.25, 2.3, 1.4));
+  var ex = new THREE.CylinderGeometry(0.075, 0.075, 2.2, 10); root.add(mesh(ex, lam(0x55504a), 0.25, 2.6, 1.4));
   [-0.42, 0.42].forEach(function (x) { root.add(mesh(new THREE.CircleGeometry(0.1, 12), LIGHT, x, 1.95, -0.2)); });
   // wheels: big rear, narrow tricycle-style front pair
   A.wheels = [];
@@ -1118,7 +1162,11 @@ function buildJD() {
     root.add(gW); A.wheels.push(gW); return gW;
   }
   tire(0.86, 0.45, -0.98, 0.86, -0.75); tire(0.86, 0.45, 0.98, 0.86, -0.75);
-  A.front = [tire(0.4, 0.22, -0.32, 0.4, 1.6, true), tire(0.4, 0.22, 0.32, 0.4, 1.6, true)];
+  A.front = [tire(0.45, 0.24, -0.8, 0.45, 1.6, true), tire(0.45, 0.24, 0.8, 0.45, 1.6, true)];
+  root.add(cbox(1.5, 0.14, 0.16, green, 0, 0.55, 1.6));                                          // wide front axle
+  var jdd = decalMat('JOHN DEERE              4230', '#f2c51f', '#1d2a1f', 512, 48, 'bold 30px Arial');
+  [-1, 1].forEach(function (s) { var p = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.08), jdd); p.position.set(s * 0.512, 1.6, 0.75); p.rotation.y = s * Math.PI / 2; root.add(p);
+    var sg = cbox(0.02, 0.55, 0.5, dark, s * 0.51, 1.15, 1.3); root.add(sg); });
   root.add(cbox(0.1, 0.1, 0.9, BLACK, 0, 0.45, -1.7));                 // drawbar
   A.cam = new V3(0, 2.6, -0.9);
   // hay wagon (separate, towed)
@@ -1142,7 +1190,7 @@ function buildJD() {
   A.trailer = wag; A.trailerLen = 5.8; A.hitch = 2.1;
   return { root: root, A: A };
 }
-var BUILD = { mgb: buildMGB, amphi: buildAmphi, jd: buildJD, kubota: buildKubota, zt: buildZT, canam: buildCanAm, utv: buildUTV }, CARS = ['mgb', 'amphi', 'jd', 'kubota', 'zt', 'canam', 'utv'], models = {};
+var BUILD = { mgb: buildMGB, amphi: buildAmphi, jd: buildJD, kubota: buildKubota, zt: buildZT, canam: buildCanAm, bobcat: buildBobcat }, CARS = ['mgb', 'amphi', 'jd', 'kubota', 'zt', 'canam', 'bobcat'], models = {};
 CARS.forEach(function (k) { models[k] = BUILD[k](); GFX.upgrade(models[k].root, { metal: 0.3, rough: 0.4 }); if (models[k].A.trailer) { GFX.upgrade(models[k].A.trailer, { metal: 0.05, rough: 0.7 }); models[k].A.trailer.visible = false; scene.add(models[k].A.trailer); } models[k].root.visible = false; scene.add(models[k].root); });
 
 // particles
@@ -1164,7 +1212,7 @@ function spawnCar() {
   C.tx = null;
   $('carName').textContent = VEH[C.car].name.toUpperCase();
   C.gear = 1; if (typeof syncShifter === 'function') syncShifter(); if (typeof syncZT === 'function') syncZT();
-  $('bLoader').style.display = C.car === 'kubota' ? '' : 'none'; $('bTop').style.display = C.car === 'mgb' ? '' : 'none'; $('bTop').textContent = C.topUp ? '☀️ Top down' : '☔ Top up'; input.loaderUp = false; $('bLoader').textContent = '⬆ Loader';
+  $('bLoader').style.display = models[C.car].A.arm ? '' : 'none'; $('bTop').style.display = C.car === 'mgb' ? '' : 'none'; $('bTop').textContent = C.topUp ? '☀️ Top down' : '☔ Top up'; input.loaderUp = false; $('bLoader').textContent = '⬆ Loader';
   if (typeof camPos !== 'undefined') camPos.set(C.x - Math.sin(C.yaw) * 8, C.y + 3.2, C.z - Math.cos(C.yaw) * 8);
 }
 function surface(x, z) { var g = groundH(x, z); return { g: g, water: g < -0.05, depth: Math.max(0, -g) }; }
@@ -1273,7 +1321,7 @@ var CAR_AUDIO = {
   amphi: { cyl: 4, idle: 800, red: 5200, gears: [0, 8, 13, 19], thump: 75, bright: 1300, grit: 0.3, vol: 0.85 },
   kubota: { cyl: 4, idle: 750, red: 2600, gears: [0, 10], thump: 55, bright: 2300, grit: 0.6, vol: 0.95, diesel: true },
   jd:    { cyl: 4, idle: 650, red: 2200, gears: [0, 9], thump: 48, bright: 2600, grit: 0.7, vol: 1.0, diesel: true },
-  utv:   { cyl: 2, idle: 1100, red: 6500, gears: [0, 17], thump: 70, bright: 1600, grit: 0.4, vol: 0.8, uneven: true },
+  bobcat: { cyl: 4, idle: 850, red: 3000, gears: [0, 12], thump: 60, bright: 2100, grit: 0.55, vol: 0.9, diesel: true },
   zt:    { cyl: 2, idle: 1500, red: 3600, gears: [0, 7], thump: 95, bright: 2200, grit: 0.45, vol: 0.8, uneven: true },
   canam: { cyl: 2, idle: 1300, red: 7500, gears: [0, 9, 20], thump: 80, bright: 2400, grit: 0.4, vol: 0.85, uneven: true }
 };
@@ -1377,7 +1425,7 @@ function toast(t, s) { var m = $('msg'); m.textContent = t; m.style.opacity = 1;
 var SIL = {
   mgb: '<svg viewBox="0 0 120 50"><path d="M8 34v-8c0-3 3-5 8-5l26-1 10-6h14l8 6 28 1c6 0 10 3 11 8v5z" fill="#cf9f2b"/><rect x="6" y="32" width="10" height="3" fill="#ddd"/><rect x="104" y="32" width="12" height="3" fill="#ddd"/><circle cx="28" cy="36" r="7" fill="#222"/><circle cx="28" cy="36" r="4" fill="#ccc"/><circle cx="92" cy="36" r="7" fill="#222"/><circle cx="92" cy="36" r="4" fill="#ccc"/><path d="M70 14l-4 6h6z" fill="#9fc3e0"/></svg>',
   amphi: '<svg viewBox="0 0 120 50"><path d="M8 20h84l18 6c-2 8-10 10-16 10H10z" fill="#2fb7b0"/><rect x="8" y="18" width="86" height="3" fill="#fff"/><path d="M68 18l-4-8h6z" fill="#9fc3e0"/><circle cx="30" cy="36" r="7" fill="#222"/><circle cx="30" cy="36" r="4" fill="#fff"/><circle cx="88" cy="36" r="7" fill="#222"/><circle cx="88" cy="36" r="4" fill="#fff"/><path d="M0 44c10-4 20 4 30 0s20 4 30 0 20 4 30 0 20 4 30 0" stroke="#41b8e8" stroke-width="3" fill="none"/></svg>',
-  utv: '<svg viewBox="0 0 120 50"><rect x="14" y="22" width="88" height="10" fill="#3d6b35"/><rect x="20" y="16" width="34" height="10" fill="#2f5a2a"/><path d="M58 22V8h36v14" stroke="#111" stroke-width="3" fill="none"/><circle cx="32" cy="36" r="9" fill="#222"/><circle cx="32" cy="36" r="4" fill="#f2c230"/><circle cx="88" cy="36" r="9" fill="#222"/><circle cx="88" cy="36" r="4" fill="#f2c230"/></svg>',
+  bobcat: '<svg viewBox="0 0 120 50"><rect x="44" y="6" width="30" height="26" rx="3" fill="#18191c"/><rect x="48" y="9" width="22" height="14" fill="#9fc3e0"/><rect x="74" y="18" width="34" height="12" fill="#f2f2ef"/><rect x="74" y="24" width="34" height="3" fill="#e8541a"/><rect x="28" y="22" width="18" height="10" fill="#f2f2ef"/><path d="M46 14L22 34" stroke="#f2f2ef" stroke-width="5"/><path d="M8 32h18l-4 8H10z" fill="#2a2b2e"/><circle cx="38" cy="38" r="8" fill="#141414"/><circle cx="38" cy="38" r="4" fill="#e8541a"/><circle cx="92" cy="38" r="8" fill="#141414"/><circle cx="92" cy="38" r="4" fill="#e8541a"/></svg>',
   jd: '<svg viewBox="0 0 120 50"><rect x="56" y="8" width="30" height="3" fill="#2f8a3a"/><path d="M60 11v14M84 11v14" stroke="#2f8a3a" stroke-width="2"/><rect x="84" y="22" width="30" height="10" fill="#2f8a3a"/><rect x="84" y="22" width="30" height="2" fill="#f2c51f"/><circle cx="68" cy="34" r="11" fill="#222"/><circle cx="68" cy="34" r="6" fill="#f2c51f"/><circle cx="106" cy="39" r="6" fill="#222"/><circle cx="106" cy="39" r="3" fill="#f2c51f"/><path d="M2 22c8-12 38-12 46 0" fill="#f1ead6"/><rect x="2" y="22" width="46" height="12" fill="#c9a26b"/><circle cx="12" cy="39" r="4" fill="#222"/><circle cx="38" cy="39" r="4" fill="#222"/></svg>',
   zt: '<svg viewBox="0 0 120 50"><rect x="20" y="30" width="80" height="7" fill="#2f8a3a"/><rect x="20" y="29" width="80" height="2" fill="#f2c51f"/><rect x="30" y="18" width="26" height="12" fill="#2f8a3a"/><rect x="58" y="16" width="14" height="14" fill="#222"/><path d="M34 18V4h20" stroke="#222" stroke-width="3" fill="none"/><circle cx="40" cy="38" r="8" fill="#222"/><circle cx="40" cy="38" r="4" fill="#f2c51f"/><circle cx="96" cy="42" r="4" fill="#222"/></svg>',
   canam: '<svg viewBox="0 0 120 50"><path d="M18 30l8-10h24l8-6h22l14 8 10 8z" fill="#f5c400"/><rect x="40" y="14" width="28" height="6" fill="#1c1d20"/><path d="M82 18l6-10h10" stroke="#1c1d20" stroke-width="3" fill="none"/><circle cx="32" cy="36" r="10" fill="#222"/><circle cx="32" cy="36" r="5" fill="#1c1d20"/><circle cx="92" cy="36" r="10" fill="#222"/><circle cx="92" cy="36" r="5" fill="#1c1d20"/></svg>',
